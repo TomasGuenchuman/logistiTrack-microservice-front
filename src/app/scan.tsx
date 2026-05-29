@@ -38,7 +38,12 @@ export default function ScanScreen() {
     setScanned(true);
     console.log("QR escaneado:", data);
 
-    // Acá después podrías navegar, abrir modal, consultar API, etc.
+    router.replace({
+      pathname: "/package/[trackingCode]",
+      params: {
+        trackingCode: data,
+      },
+    });
   };
 
   if (!permission) {
@@ -76,7 +81,7 @@ export default function ScanScreen() {
         barcodeScannerSettings={{
           barcodeTypes: ["qr"],
         }}
-        onBarcodeScanned={handleQRCodeScanned}
+        onBarcodeScanned={scanned ? undefined : handleQRCodeScanned}
       />
 
       <View style={styles.darkOverlay} />
