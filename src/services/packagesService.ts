@@ -47,6 +47,9 @@ export async function createPackage(
 
 export async function getPackages(): Promise<Package[]> {
   const response = await apiClient.get<Package[]>('/packages');
+    console.log("packagesService: status:", response.status);
+  console.log("packagesService: data:", response.data);
+
   return response.data;
 }
 
