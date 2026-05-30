@@ -4,6 +4,9 @@ import type { DeliveryTab } from "./delivery";
 type DeliveryTabsProps = {
   activeTab: DeliveryTab;
   onChangeTab: (tab: DeliveryTab) => void;
+  pending: number;
+  inTransit: number;
+  delivered: number;
 };
 
 type TabButtonProps = {
@@ -25,23 +28,29 @@ function TabButton({ label, active, onPress }: TabButtonProps) {
   );
 }
 
-export function DeliveryTabs({ activeTab, onChangeTab }: DeliveryTabsProps) {
+export function DeliveryTabs({
+  activeTab,
+  onChangeTab,
+  pending,
+  inTransit,
+  delivered,
+}: DeliveryTabsProps) {
   return (
     <View style={styles.tabsContainer}>
       <TabButton
-        label="Pendientes (8)"
+        label={`Pendientes (${pending})`}
         active={activeTab === "pending"}
         onPress={() => onChangeTab("pending")}
       />
 
       <TabButton
-        label="En Tránsito (1)"
+        label={`En Tránsito (${inTransit})`}
         active={activeTab === "inTransit"}
         onPress={() => onChangeTab("inTransit")}
       />
 
       <TabButton
-        label="Entregados (3)"
+        label={`Entregados (${delivered})`}
         active={activeTab === "delivered"}
         onPress={() => onChangeTab("delivered")}
       />

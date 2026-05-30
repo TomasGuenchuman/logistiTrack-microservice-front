@@ -22,26 +22,17 @@ export default function HomeScreen() {
 
   async function loadPackages() {
     try {
-      console.log("1. Iniciando consulta a la API...");
-
       setLoading(true);
       setError(null);
 
       const data = await getPackages();
 
-      console.log("2. Respuesta recibida de la API:");
-      console.log(data);
-
       setPackages(data);
-
-      console.log("3. Packages guardados en el estado");
     } catch (error) {
-      console.log("4. Error cargando paquetes:");
       console.log(error);
 
       setError("No se pudieron cargar los paquetes");
     } finally {
-      console.log("5. Finalizó loadPackages");
       setLoading(false);
     }
   }
@@ -73,9 +64,15 @@ export default function HomeScreen() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
-        <DeliveryProgress delivered={4} total={15} />
+        <DeliveryProgress delivered={deliveredCount} total={totalCount} />
 
-        <DeliveryTabs activeTab={activeTab} onChangeTab={setActiveTab} />
+        <DeliveryTabs
+          activeTab={activeTab}
+          onChangeTab={setActiveTab}
+          pending={pendingPackages.length}
+          inTransit={inTransitPackages.length}
+          delivered={deliveredCount}
+        />
 
         {loading && (
           <View style={styles.centerBox}>
