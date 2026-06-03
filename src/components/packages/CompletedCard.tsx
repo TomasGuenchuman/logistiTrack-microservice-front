@@ -1,35 +1,33 @@
+import type { Package } from "@/types/Package";
 import { User } from "lucide-react-native";
 import { StyleSheet, Text, View } from "react-native";
-import type { Delivery } from "./delivery";
 
 type CompletedCardProps = {
-  delivery: Delivery;
+  pkg: Package;
 };
 
-export function CompletedCard({ delivery }: CompletedCardProps) {
+export function CompletedCard({ pkg }: CompletedCardProps) {
   return (
     <View style={styles.completedCard}>
       <View style={styles.completedTop}>
-        <Text style={styles.completedCode}>{delivery.code}</Text>
+        <Text style={styles.completedCode}>{pkg.code}</Text>
 
         <View style={styles.completedBadge}>
           <Text style={styles.completedBadgeText}>Entregado</Text>
         </View>
       </View>
 
-      <Text style={styles.completedAddress}>{delivery.address}</Text>
-      <Text style={styles.completedDetail}>{delivery.detail}</Text>
+      <Text style={styles.completedAddress}>{pkg.address}</Text>
+      <Text style={styles.completedDetail}>{pkg.detail}</Text>
 
       <View style={styles.clientBox}>
         <User size={22} color="#5C6470" strokeWidth={2} />
         <Text style={styles.clientText}>
-          Cliente: <Text style={styles.clientName}>{delivery.client}</Text>
+          Cliente: <Text style={styles.clientName}>{pkg.client}</Text>
         </Text>
       </View>
 
-      <Text style={styles.deliveredAt}>
-        Entregado a las {delivery.deliveredAt}
-      </Text>
+      <Text style={styles.deliveredAt}>Entregado a las {pkg.deliveredAt}</Text>
     </View>
   );
 }

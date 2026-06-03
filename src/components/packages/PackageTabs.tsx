@@ -1,9 +1,9 @@
+import type { PackageStatus } from "@/types/PackageStatus";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import type { DeliveryTab } from "./delivery";
 
-type DeliveryTabsProps = {
-  activeTab: DeliveryTab;
-  onChangeTab: (tab: DeliveryTab) => void;
+type PackageTabsProps = {
+  activeTab: PackageStatus;
+  onChangeTab: (tab: PackageStatus) => void;
 };
 
 type TabButtonProps = {
@@ -25,25 +25,25 @@ function TabButton({ label, active, onPress }: TabButtonProps) {
   );
 }
 
-export function DeliveryTabs({ activeTab, onChangeTab }: DeliveryTabsProps) {
+export function PackageTabs({ activeTab, onChangeTab }: PackageTabsProps) {
   return (
     <View style={styles.tabsContainer}>
       <TabButton
         label="Pendientes (8)"
-        active={activeTab === "pending"}
-        onPress={() => onChangeTab("pending")}
+        active={activeTab === "PENDING"}
+        onPress={() => onChangeTab("PENDING")}
       />
 
       <TabButton
         label="En Tránsito (1)"
-        active={activeTab === "inTransit"}
-        onPress={() => onChangeTab("inTransit")}
+        active={activeTab === "IN_TRANSIT"}
+        onPress={() => onChangeTab("IN_TRANSIT")}
       />
 
       <TabButton
         label="Entregados (3)"
-        active={activeTab === "delivered"}
-        onPress={() => onChangeTab("delivered")}
+        active={activeTab === "DELIVERED"}
+        onPress={() => onChangeTab("DELIVERED")}
       />
     </View>
   );

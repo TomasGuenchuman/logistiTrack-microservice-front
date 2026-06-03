@@ -1,19 +1,14 @@
 import { Clock, Map } from "lucide-react-native";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-type DeliveryCardProps = {
+type PackageCardProps = {
   code: string;
   address: string;
   detail: string;
   eta: string;
 };
 
-export function DeliveryCard({
-  code,
-  address,
-  detail,
-  eta,
-}: DeliveryCardProps) {
+export function PackageCard({ code, address, detail, eta }: PackageCardProps) {
   return (
     <View style={styles.card}>
       <View style={styles.cardHeader}>
