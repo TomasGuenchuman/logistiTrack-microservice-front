@@ -1,4 +1,4 @@
-import { Package } from "@/types/Package";
+import { Package } from "@/types/domain/Package";
 import {
   AlertTriangle,
   Circle,

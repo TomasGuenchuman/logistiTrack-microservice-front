@@ -1,13 +1,15 @@
 import { PackageStatus } from "@/types/PackageStatus";
 
+// entidad Package que usará el frontend,
+// con los mismos campos que el backend
+// pero respetando convención camelCase para el frontend
 export type Package = {
-  // campos reales de la entidad Package del backend
   id: string;
   trackingCode: string;
   recipientName: string;
   recipientDocument: string;
   address: string;
-  address_detail?: string;
+  addressDetail?: string;
   status: PackageStatus;
   courierId?: string;
   deliveredAt?: string;

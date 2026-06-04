@@ -4,14 +4,14 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 type PackageCardProps = {
   trackingCode: string;
   address: string;
-  address_detail?: string;
+  addressDetail?: string;
   eta?: string;
 };
 
 export function PackageCard({
   trackingCode,
   address,
-  address_detail,
+  addressDetail,
   eta,
 }: PackageCardProps) {
   return (
@@ -21,7 +21,7 @@ export function PackageCard({
       </View>
 
       <Text style={styles.address}>{address}</Text>
-      {address_detail && <Text style={styles.detail}>{address_detail}</Text>}
+      {addressDetail && <Text style={styles.detail}>{addressDetail}</Text>}
 
       <View style={styles.etaRow}>
         <Clock size={19} color="#5B6775" strokeWidth={2} />

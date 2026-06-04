@@ -1,4 +1,4 @@
-import type { Package } from "@/types/Package";
+import type { Package } from "@/types/domain/Package";
 import { User } from "lucide-react-native";
 import { StyleSheet, Text, View } from "react-native";
 
@@ -18,8 +18,8 @@ export function CompletedCard({ pkg }: CompletedCardProps) {
       </View>
 
       <Text style={styles.completedAddress}>{pkg.address}</Text>
-      {pkg.address_detail && (
-        <Text style={styles.completedDetail}>{pkg.address_detail}</Text>
+      {pkg.addressDetail && (
+        <Text style={styles.completedDetail}>{pkg.addressDetail}</Text>
       )}
 
       <View style={styles.clientBox}>

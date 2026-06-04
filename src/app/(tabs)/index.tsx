@@ -43,7 +43,7 @@ export default function HomeScreen() {
               key={pkgViewModel.package.id}
               trackingCode={pkgViewModel.package.trackingCode}
               address={pkgViewModel.package.address}
-              address_detail={pkgViewModel.package.address_detail}
+              addressDetail={pkgViewModel.package.addressDetail}
               eta={pkgViewModel.eta ?? ""}
             />
           ))}
