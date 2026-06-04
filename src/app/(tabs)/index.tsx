@@ -32,24 +32,30 @@ export default function HomeScreen() {
         <PackageTabs activeTab={activeTab} onChangeTab={setActiveTab} />
 
         {activeTab === "PENDING" &&
-          pendingPackages.map((pkg) => (
+          pendingPackages.map((pkgViewModel) => (
             <PackageCard
-              key={pkg.id}
-              code={pkg.code}
-              address={pkg.address}
-              detail={pkg.detail}
-              eta={pkg.eta ?? ""}
+              key={pkgViewModel.package.id}
+              trackingCode={pkgViewModel.package.trackingCode}
+              address={pkgViewModel.package.address}
+              address_detail={pkgViewModel.package.address_detail}
+              eta={pkgViewModel.eta ?? ""}
             />
           ))}
 
         {activeTab === "IN_TRANSIT" &&
-          inTransitPackages.map((pkg) => (
-            <InTransitCard key={pkg.id} pkg={pkg} />
+          inTransitPackages.map((pkgViewModel) => (
+            <InTransitCard
+              key={pkgViewModel.package.id}
+              pkg={pkgViewModel.package}
+            />
           ))}
 
         {activeTab === "DELIVERED" &&
-          deliveredPackages.map((pkg) => (
-            <CompletedCard key={pkg.id} pkg={pkg} />
+          deliveredPackages.map((pkgViewModel) => (
+            <CompletedCard
+              key={pkgViewModel.package.id}
+              pkg={pkgViewModel.package}
+            />
           ))}
       </ScrollView>
     </SafeAreaView>

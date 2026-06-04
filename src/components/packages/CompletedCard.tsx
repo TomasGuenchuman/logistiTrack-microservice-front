@@ -10,7 +10,7 @@ export function CompletedCard({ pkg }: CompletedCardProps) {
   return (
     <View style={styles.completedCard}>
       <View style={styles.completedTop}>
-        <Text style={styles.completedCode}>{pkg.code}</Text>
+        <Text style={styles.completedCode}>{pkg.trackingCode}</Text>
 
         <View style={styles.completedBadge}>
           <Text style={styles.completedBadgeText}>Entregado</Text>
@@ -18,12 +18,14 @@ export function CompletedCard({ pkg }: CompletedCardProps) {
       </View>
 
       <Text style={styles.completedAddress}>{pkg.address}</Text>
-      <Text style={styles.completedDetail}>{pkg.detail}</Text>
+      {pkg.address_detail && (
+        <Text style={styles.completedDetail}>{pkg.address_detail}</Text>
+      )}
 
       <View style={styles.clientBox}>
         <User size={22} color="#5C6470" strokeWidth={2} />
         <Text style={styles.clientText}>
-          Cliente: <Text style={styles.clientName}>{pkg.client}</Text>
+          Cliente: <Text style={styles.clientName}>{pkg.recipientName}</Text>
         </Text>
       </View>
 

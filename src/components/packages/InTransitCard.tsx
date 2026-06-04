@@ -20,7 +20,7 @@ export function InTransitCard({ pkg }: InTransitCardProps) {
       <View style={styles.inTransitTop}>
         <View style={styles.codeRow}>
           <Circle size={14} color="#004A98" strokeWidth={2.5} />
-          <Text style={styles.inTransitCode}>{pkg.code}</Text>
+          <Text style={styles.inTransitCode}>{pkg.trackingCode}</Text>
         </View>
 
         <View style={styles.inTransitBadge}>
@@ -34,14 +34,16 @@ export function InTransitCard({ pkg }: InTransitCardProps) {
 
           <View style={styles.addressInfo}>
             <Text style={styles.inTransitAddress}>{pkg.address}</Text>
-            <Text style={styles.inTransitDetail}>{pkg.detail}</Text>
+            {pkg.address_detail && (
+              <Text style={styles.inTransitDetail}>{pkg.address_detail}</Text>
+            )}
           </View>
         </View>
 
         <View style={styles.clientBox}>
           <User size={20} color="#5C6470" strokeWidth={2} />
           <Text style={styles.clientText}>
-            Cliente: <Text style={styles.clientName}>{pkg.client}</Text>
+            Cliente: <Text style={styles.clientName}>{pkg.recipientName}</Text>
           </Text>
         </View>
 
