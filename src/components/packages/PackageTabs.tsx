@@ -4,6 +4,9 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 type PackageTabsProps = {
   activeTab: PackageStatus;
   onChangeTab: (tab: PackageStatus) => void;
+  pendingCount: number;
+  inTransitCount: number;
+  deliveredCount: number;
 };
 
 type TabButtonProps = {
@@ -25,23 +28,29 @@ function TabButton({ label, active, onPress }: TabButtonProps) {
   );
 }
 
-export function PackageTabs({ activeTab, onChangeTab }: PackageTabsProps) {
+export function PackageTabs({
+  activeTab,
+  onChangeTab,
+  pendingCount,
+  inTransitCount,
+  deliveredCount,
+}: PackageTabsProps) {
   return (
     <View style={styles.tabsContainer}>
       <TabButton
-        label="Pendientes (8)"
+        label={`Pendientes (${pendingCount})`}
         active={activeTab === "PENDING"}
         onPress={() => onChangeTab("PENDING")}
       />
 
       <TabButton
-        label="En Tránsito (1)"
+        label={`En Tránsito (${inTransitCount})`}
         active={activeTab === "IN_TRANSIT"}
         onPress={() => onChangeTab("IN_TRANSIT")}
       />
 
       <TabButton
-        label="Entregados (3)"
+        label={`Entregados (${deliveredCount})`}
         active={activeTab === "DELIVERED"}
         onPress={() => onChangeTab("DELIVERED")}
       />

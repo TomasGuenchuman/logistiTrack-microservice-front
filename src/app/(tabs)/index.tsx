@@ -29,7 +29,13 @@ export default function HomeScreen() {
       >
         <PackageProgress delivered={deliveredPackages.length} total={15} />
 
-        <PackageTabs activeTab={activeTab} onChangeTab={setActiveTab} />
+        <PackageTabs
+          activeTab={activeTab}
+          onChangeTab={setActiveTab}
+          pendingCount={pendingPackages.length}
+          inTransitCount={inTransitPackages.length}
+          deliveredCount={deliveredPackages.length}
+        />
 
         {activeTab === "PENDING" &&
           pendingPackages.map((pkgViewModel) => (
