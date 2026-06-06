@@ -1,4 +1,5 @@
 import type { Package } from "@/types/domain/Package";
+import { formatTime } from "@/utils/dateUtils";
 import { User } from "lucide-react-native";
 import { StyleSheet, Text, View } from "react-native";
 
@@ -29,7 +30,9 @@ export function CompletedCard({ pkg }: CompletedCardProps) {
         </Text>
       </View>
 
-      <Text style={styles.deliveredAt}>Entregado a las {pkg.deliveredAt}</Text>
+      <Text style={styles.deliveredAt}>
+        Entregado a las {formatTime(pkg.deliveredAt)}
+      </Text>
     </View>
   );
 }
