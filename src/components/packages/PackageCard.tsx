@@ -1,18 +1,16 @@
-import { Clock, Map } from "lucide-react-native";
+import { Map } from "lucide-react-native";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 type PackageCardProps = {
   trackingCode: string;
   address: string;
   addressDetail?: string;
-  eta?: string;
 };
 
 export function PackageCard({
   trackingCode,
   address,
   addressDetail,
-  eta,
 }: PackageCardProps) {
   return (
     <View style={styles.card}>
@@ -22,11 +20,6 @@ export function PackageCard({
 
       <Text style={styles.address}>{address}</Text>
       {addressDetail && <Text style={styles.detail}>{addressDetail}</Text>}
-
-      <View style={styles.etaRow}>
-        <Clock size={19} color="#5B6775" strokeWidth={2} />
-        {eta && <Text style={styles.eta}>ETA: {eta}</Text>}
-      </View>
 
       <View style={styles.actionsRow}>
         <Pressable style={styles.mapButton}>
@@ -94,13 +87,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 10,
     marginBottom: 28,
-  },
-
-  eta: {
-    fontSize: 18,
-    color: "#5B6775",
-    fontWeight: "500",
-    letterSpacing: 0.6,
   },
 
   actionsRow: {

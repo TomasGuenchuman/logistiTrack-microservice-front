@@ -1,7 +1,7 @@
 import { PackageStatus } from "@/types/PackageStatus";
 
 // reflejo exactamente la entidad real que viene del backend
-export type PackageAPIResponse = {
+export type PackageApiResponse = {
   id: string;
   tracking_code: string;
   recipient_name: string;

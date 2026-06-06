@@ -34,8 +34,8 @@ export function InTransitCard({ pkg }: InTransitCardProps) {
 
           <View style={styles.addressInfo}>
             <Text style={styles.inTransitAddress}>{pkg.address}</Text>
-            {pkg.address_detail && (
-              <Text style={styles.inTransitDetail}>{pkg.address_detail}</Text>
+            {pkg.addressDetail && (
+              <Text style={styles.inTransitDetail}>{pkg.addressDetail}</Text>
             )}
           </View>
         </View>

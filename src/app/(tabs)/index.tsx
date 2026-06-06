@@ -4,20 +4,19 @@ import { InTransitCard } from "@/components/packages/InTransitCard";
 import { PackageCard } from "@/components/packages/PackageCard";
 import { PackageProgress } from "@/components/packages/PackageProgress";
 import { PackageTabs } from "@/components/packages/PackageTabs";
+import { usePackages } from "@/hooks/usePackages";
+import { usePackagesByStatus } from "@/hooks/usePackagesByStatus";
+import { PackageStatus } from "@/types/PackageStatus";
 import { useState } from "react";
 import { ScrollView, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import {
-  deliveredPackages,
-  inTransitPackages,
-  pendingPackages,
-} from "@/mock/data";
-
 export default function HomeScreen() {
-  const [activeTab, setActiveTab] = useState<
-    "PENDING" | "IN_TRANSIT" | "DELIVERED"
-  >("PENDING");
+  const [activeTab, setActiveTab] = useState<PackageStatus>("PENDING");
+  const packages = usePackages();
+  const pendingPackages = usePackagesByStatus(packages, "PENDING");
+  const inTransitPackages = usePackagesByStatus(packages, "IN_TRANSIT");
+  const deliveredPackages = usePackagesByStatus(packages, "DELIVERED");
 
   return (
     <SafeAreaView style={styles.screen} edges={["top"]}>
@@ -38,30 +37,23 @@ export default function HomeScreen() {
         />
 
         {activeTab === "PENDING" &&
-          pendingPackages.map((pkgViewModel) => (
+          pendingPackages.map((pkg) => (
             <PackageCard
-              key={pkgViewModel.package.id}
-              trackingCode={pkgViewModel.package.trackingCode}
-              address={pkgViewModel.package.address}
-              addressDetail={pkgViewModel.package.addressDetail}
-              eta={pkgViewModel.eta ?? ""}
+              key={pkg.id}
+              trackingCode={pkg.trackingCode}
+              address={pkg.address}
+              addressDetail={pkg.addressDetail}
             />
           ))}
 
         {activeTab === "IN_TRANSIT" &&
-          inTransitPackages.map((pkgViewModel) => (
-            <InTransitCard
-              key={pkgViewModel.package.id}
-              pkg={pkgViewModel.package}
-            />
+          inTransitPackages.map((pkg) => (
+            <InTransitCard key={pkg.id} pkg={pkg} />
           ))}
 
         {activeTab === "DELIVERED" &&
-          deliveredPackages.map((pkgViewModel) => (
-            <CompletedCard
-              key={pkgViewModel.package.id}
-              pkg={pkgViewModel.package}
-            />
+          deliveredPackages.map((pkg) => (
+            <CompletedCard key={pkg.id} pkg={pkg} />
           ))}
       </ScrollView>
     </SafeAreaView>
