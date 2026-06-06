@@ -1,3 +1,4 @@
+import { Package } from "@/types/domain/Package";
 import {
   AlertTriangle,
   Circle,
@@ -8,19 +9,18 @@ import {
   User,
 } from "lucide-react-native";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import type { Delivery } from "./delivery";
 
 type InTransitCardProps = {
-  delivery: Delivery;
+  pkg: Package;
 };
 
-export function InTransitCard({ delivery }: InTransitCardProps) {
+export function InTransitCard({ pkg }: InTransitCardProps) {
   return (
     <View style={styles.inTransitCard}>
       <View style={styles.inTransitTop}>
         <View style={styles.codeRow}>
           <Circle size={14} color="#004A98" strokeWidth={2.5} />
-          <Text style={styles.inTransitCode}>{delivery.code}</Text>
+          <Text style={styles.inTransitCode}>{pkg.trackingCode}</Text>
         </View>
 
         <View style={styles.inTransitBadge}>
@@ -33,15 +33,17 @@ export function InTransitCard({ delivery }: InTransitCardProps) {
           <MapPin size={27} color="#004A98" strokeWidth={2.4} />
 
           <View style={styles.addressInfo}>
-            <Text style={styles.inTransitAddress}>{delivery.address}</Text>
-            <Text style={styles.inTransitDetail}>{delivery.detail}</Text>
+            <Text style={styles.inTransitAddress}>{pkg.address}</Text>
+            {pkg.address_detail && (
+              <Text style={styles.inTransitDetail}>{pkg.address_detail}</Text>
+            )}
           </View>
         </View>
 
         <View style={styles.clientBox}>
           <User size={20} color="#5C6470" strokeWidth={2} />
           <Text style={styles.clientText}>
-            Cliente: <Text style={styles.clientName}>{delivery.client}</Text>
+            Cliente: <Text style={styles.clientName}>{pkg.recipientName}</Text>
           </Text>
         </View>
 

@@ -1,23 +1,23 @@
+import { CompletedCard } from "@/components/packages/CompletedCard";
+import { HomeHeader } from "@/components/packages/HomeHeader";
+import { InTransitCard } from "@/components/packages/InTransitCard";
+import { PackageCard } from "@/components/packages/PackageCard";
+import { PackageProgress } from "@/components/packages/PackageProgress";
+import { PackageTabs } from "@/components/packages/PackageTabs";
 import { useState } from "react";
 import { ScrollView, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { CompletedCard } from "../../components/delivery/CompletedCard";
-import { DeliveryCard } from "../../components/delivery/DeliveryCard";
-import { DeliveryProgress } from "../../components/delivery/DeliveryProgress";
-import { DeliveryTabs } from "../../components/delivery/DeliveryTabs";
-import { HomeHeader } from "../../components/delivery/HomeHeader";
-import { InTransitCard } from "../../components/delivery/InTransitCard";
 
 import {
-  deliveredDeliveries,
-  inTransitDeliveries,
-  pendingDeliveries,
-} from "../../mock/delivery";
+  deliveredPackages,
+  inTransitPackages,
+  pendingPackages,
+} from "@/mock/data";
 
 export default function HomeScreen() {
   const [activeTab, setActiveTab] = useState<
-    "pending" | "inTransit" | "delivered"
-  >("pending");
+    "PENDING" | "IN_TRANSIT" | "DELIVERED"
+  >("PENDING");
 
   return (
     <SafeAreaView style={styles.screen} edges={["top"]}>
@@ -27,29 +27,41 @@ export default function HomeScreen() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
-        <DeliveryProgress delivered={4} total={15} />
+        <PackageProgress delivered={deliveredPackages.length} total={15} />
 
-        <DeliveryTabs activeTab={activeTab} onChangeTab={setActiveTab} />
+        <PackageTabs
+          activeTab={activeTab}
+          onChangeTab={setActiveTab}
+          pendingCount={pendingPackages.length}
+          inTransitCount={inTransitPackages.length}
+          deliveredCount={deliveredPackages.length}
+        />
 
-        {activeTab === "pending" &&
-          pendingDeliveries.map((delivery) => (
-            <DeliveryCard
-              key={delivery.id}
-              code={delivery.code}
-              address={delivery.address}
-              detail={delivery.detail}
-              eta={delivery.eta ?? ""}
+        {activeTab === "PENDING" &&
+          pendingPackages.map((pkgViewModel) => (
+            <PackageCard
+              key={pkgViewModel.package.id}
+              trackingCode={pkgViewModel.package.trackingCode}
+              address={pkgViewModel.package.address}
+              addressDetail={pkgViewModel.package.addressDetail}
+              eta={pkgViewModel.eta ?? ""}
             />
           ))}
 
-        {activeTab === "inTransit" &&
-          inTransitDeliveries.map((delivery) => (
-            <InTransitCard key={delivery.id} delivery={delivery} />
+        {activeTab === "IN_TRANSIT" &&
+          inTransitPackages.map((pkgViewModel) => (
+            <InTransitCard
+              key={pkgViewModel.package.id}
+              pkg={pkgViewModel.package}
+            />
           ))}
 
-        {activeTab === "delivered" &&
-          deliveredDeliveries.map((delivery) => (
-            <CompletedCard key={delivery.id} delivery={delivery} />
+        {activeTab === "DELIVERED" &&
+          deliveredPackages.map((pkgViewModel) => (
+            <CompletedCard
+              key={pkgViewModel.package.id}
+              pkg={pkgViewModel.package}
+            />
           ))}
       </ScrollView>
     </SafeAreaView>

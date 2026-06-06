@@ -1,31 +1,31 @@
 import { Clock, Map } from "lucide-react-native";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-type DeliveryCardProps = {
-  code: string;
+type PackageCardProps = {
+  trackingCode: string;
   address: string;
-  detail: string;
-  eta: string;
+  addressDetail?: string;
+  eta?: string;
 };
 
-export function DeliveryCard({
-  code,
+export function PackageCard({
+  trackingCode,
   address,
-  detail,
+  addressDetail,
   eta,
-}: DeliveryCardProps) {
+}: PackageCardProps) {
   return (
     <View style={styles.card}>
       <View style={styles.cardHeader}>
-        <Text style={styles.trackingCode}>{code}</Text>
+        <Text style={styles.trackingCode}>{trackingCode}</Text>
       </View>
 
       <Text style={styles.address}>{address}</Text>
-      <Text style={styles.detail}>{detail}</Text>
+      {addressDetail && <Text style={styles.detail}>{addressDetail}</Text>}
 
       <View style={styles.etaRow}>
         <Clock size={19} color="#5B6775" strokeWidth={2} />
-        <Text style={styles.eta}>ETA: {eta}</Text>
+        {eta && <Text style={styles.eta}>ETA: {eta}</Text>}
       </View>
 
       <View style={styles.actionsRow}>

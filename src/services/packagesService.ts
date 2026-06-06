@@ -1,20 +1,6 @@
-// src/services/packagesService.ts
-
-import { apiClient } from '../api/apiClient';
-
-export type PackageStatus = 'PENDING' | 'IN_TRANSIT' | 'DELIVERED';
-
-export interface Package {
-  id: string;
-  trackingCode: string;
-  recipientName: string;
-  recipientDocument: string;
-  address: string;
-  status: PackageStatus;
-  courierId: string;
-  createdAt?: string;
-  updatedAt?: string;
-}
+import { Package } from "@/types/domain/Package";
+import { PackageStatus } from "@/types/PackageStatus";
+import { apiClient } from "../api/apiClient";
 
 export interface CreatePackagePayload {
   trackingCode: string;
@@ -41,12 +27,12 @@ export interface UpdatePackageStatusPayload {
 export async function createPackage(
   data: CreatePackagePayload,
 ): Promise<Package> {
-  const response = await apiClient.post<Package>('/packages', data);
+  const response = await apiClient.post<Package>("/packages", data);
   return response.data;
 }
 
 export async function getPackages(): Promise<Package[]> {
-  const response = await apiClient.get<Package[]>('/packages');
+  const response = await apiClient.get<Package[]>("/packages");
   return response.data;
 }
 
@@ -56,7 +42,6 @@ export async function getPackageByTrackingCode(
   const response = await apiClient.get<Package>(
     `/packages/tracking/${trackingCode}`,
   );
-
   return response.data;
 }
 

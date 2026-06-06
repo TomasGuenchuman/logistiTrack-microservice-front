@@ -1,12 +1,12 @@
-import { StyleSheet, Text, View } from "react-native";
+import { DimensionValue, StyleSheet, Text, View } from "react-native";
 
-type DeliveryProgressProps = {
+type PackageProgressProps = {
   delivered: number;
   total: number;
 };
 
-export function DeliveryProgress({ delivered, total }: DeliveryProgressProps) {
-  const progress = `${(delivered / total) * 100}%`;
+export function PackageProgress({ delivered, total }: PackageProgressProps) {
+  const progress: DimensionValue = `${(delivered / total) * 100}%`;
 
   return (
     <>
