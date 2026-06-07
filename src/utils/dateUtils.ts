@@ -11,4 +11,4 @@ export function formatTime(timestamp: string | undefined): string {
     minute: "2-digit",
     hour12: false,
   });
-}
+};

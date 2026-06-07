@@ -87,9 +87,11 @@ const styles = StyleSheet.create({
     },
     elevation: 2,
   },
+
   cardHeader: {
     marginBottom: 18,
   },
+
   trackingCode: {
     fontSize: 20,
     fontWeight: "800",

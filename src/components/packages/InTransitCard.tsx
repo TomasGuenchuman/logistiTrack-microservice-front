@@ -7,7 +7,6 @@ type InTransitCardProps = {
   pkg: Package;
 };
 
-
 export function InTransitCard({ pkg }: InTransitCardProps) {
   return (
     <View style={styles.inTransitCard}>
