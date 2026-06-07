@@ -1,9 +1,11 @@
-import { createContext, ReactNode, useContext, useState } from "react";
+import { createContext, ReactNode, useContext, useState, useEffect } from "react";
+import { TokenService } from "../services/token-service";
 
 type AuthContextType = {
   isAuthenticated: boolean;
-  login: () => void;
-  logout: () => void;
+  isLoading: boolean;
+  login: (accessToken: string, refreshToken: string) => Promise<void>;
+  logout: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -14,17 +16,31 @@ type AuthProviderProps = {
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  function login() {
+  useEffect(() => {
+    async function checkAuthStatus() {
+      const token = await TokenService.getAccessToken();
+      if (token) {
+        setIsAuthenticated(true);
+      }
+      setIsLoading(false);
+    }
+    checkAuthStatus();
+  }, []);
+
+  async function login(accessToken: string, refreshToken: string) {
+    await TokenService.saveTokens(accessToken, refreshToken);
     setIsAuthenticated(true);
   }
 
-  function logout() {
+  async function logout() {
+    await TokenService.clearTokens();
     setIsAuthenticated(false);
   }
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, isLoading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
