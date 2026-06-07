@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "losgistiTrack-front",
-    "slug": "losgistiTrack-front",
+    "name": "LogistiTrack-front",
+    "slug": "logistiTrack-front",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "losgistitrackfront",
+    "scheme": "logistitrackfront",
     "userInterfaceStyle": "automatic",
     "ios": {
       "icon": "./assets/expo.icon"

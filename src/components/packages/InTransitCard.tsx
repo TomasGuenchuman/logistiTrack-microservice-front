@@ -1,26 +1,20 @@
-import {
-  AlertTriangle,
-  Circle,
-  Map,
-  MapPin,
-  Phone,
-  QrCode,
-  User,
-} from "lucide-react-native";
+import { Package } from "@/types/domain/Package";
+import { openMapWithAddress } from "@/utils/navigationUtils";
+import { AlertTriangle, Circle, Map, MapPin, Phone, QrCode, User } from "lucide-react-native";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import type { Delivery } from "./delivery";
 
 type InTransitCardProps = {
-  delivery: Delivery;
+  pkg: Package;
 };
 
-export function InTransitCard({ delivery }: InTransitCardProps) {
+
+export function InTransitCard({ pkg }: InTransitCardProps) {
   return (
     <View style={styles.inTransitCard}>
       <View style={styles.inTransitTop}>
         <View style={styles.codeRow}>
           <Circle size={14} color="#004A98" strokeWidth={2.5} />
-          <Text style={styles.inTransitCode}>{delivery.code}</Text>
+          <Text style={styles.inTransitCode}>{pkg.trackingCode}</Text>
         </View>
 
         <View style={styles.inTransitBadge}>
@@ -33,20 +27,22 @@ export function InTransitCard({ delivery }: InTransitCardProps) {
           <MapPin size={27} color="#004A98" strokeWidth={2.4} />
 
           <View style={styles.addressInfo}>
-            <Text style={styles.inTransitAddress}>{delivery.address}</Text>
-            <Text style={styles.inTransitDetail}>{delivery.detail}</Text>
+            <Text style={styles.inTransitAddress}>{pkg.address}</Text>
+            {pkg.addressDetail && (
+              <Text style={styles.inTransitDetail}>{pkg.addressDetail}</Text>
+            )}
           </View>
         </View>
 
         <View style={styles.clientBox}>
           <User size={20} color="#5C6470" strokeWidth={2} />
           <Text style={styles.clientText}>
-            Cliente: <Text style={styles.clientName}>{delivery.client}</Text>
+            Cliente: <Text style={styles.clientName}>{pkg.recipientName}</Text>
           </Text>
         </View>
 
         <View style={styles.inTransitActions}>
-          <Pressable style={styles.secondaryActionButton}>
+          <Pressable style={styles.secondaryActionButton} onPress={() => openMapWithAddress(pkg.address)}>
             <Map size={20} color="#4B5563" strokeWidth={2} />
             <Text style={styles.secondaryActionText}>Ver Mapa</Text>
           </Pressable>
