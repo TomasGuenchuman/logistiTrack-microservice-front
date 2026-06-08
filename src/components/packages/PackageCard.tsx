@@ -8,9 +8,10 @@ import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-nati
 // Componente de tarjeta de paquete con acciones para ver mapa e iniciar viaje
 type PackageCardProps = {
   pkg: Package;
+  onRefresh?: () => void; // Función opcional para refrescar la lista después de iniciar el viaje
 };
 
-export function PackageCard({ pkg }: PackageCardProps) {
+export function PackageCard({ pkg, onRefresh }: PackageCardProps) {
   const [loading, setLoading] = useState(false);
 
   // ACCIÓN DEL BOTÓN VER MAPA: Solo ver el pin
@@ -25,6 +26,8 @@ export function PackageCard({ pkg }: PackageCardProps) {
       
       // 1. Cambiamos el estado en la arquitectura (Mocks/API)
       await packageService.updatePackage(pkg.id, { status: "IN_TRANSIT" });
+
+      onRefresh?.(); // Refrescamos la lista de paquetes en la pantalla principal, si se proporcionó la función
       
       // 2. Lanzamos el modo indicaciones directo
       openMapWithInstructions(pkg.address);

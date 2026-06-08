@@ -8,6 +8,7 @@ import { PackageService } from "./PackageService";
 export interface UpdatePackagePayload {
   status?: PackageStatus;
   courierId?: string;
+  deliveredAt?: string; // Campo adicional para registrar la fecha de entrega
 }
 
 // Esta clase simula el comportamiento de un servicio real, pero usando datos mockeados en memoria.
@@ -40,7 +41,10 @@ export class MockPackageService implements PackageService {
 
   // IMPLEMENTACIÓN DE ACTUALIZACIÓN EN MEMORIA
   // Esto permite que al tocar "AGREGAR A MI RUTA" el estado cambie de verdad en el array falso
-  async updatePackage(id: string, data: { status?: any; courierId?: string }): Promise<Package> {
+  async updatePackage(
+    id: string, 
+    data: { status?: any; courierId?: string; deliveredAt?: string } // <-- Agregamos deliveredAt acá
+  ): Promise<Package> {
     await new Promise((resolve) => setTimeout(resolve, 500));
     
     const pkgIndex = packagesMock.findIndex((p) => p.id === id);
@@ -53,11 +57,16 @@ export class MockPackageService implements PackageService {
     const updateData: Record<string, any> = {};
     if (data.status) updateData.status = data.status;
     if (data.courierId) updateData.courier_id = data.courierId;
+    
+    // Si desde el modal de firma mandamos la hora de entrega, la traducimos a delivered_at
+    if (data.deliveredAt) {
+      updateData.delivered_at = data.deliveredAt;
+    }
 
     packagesMock[pkgIndex] = {
       ...packagesMock[pkgIndex],
       ...updateData,
-      updated_at: new Date().toISOString()
+      updated_at: new Date().toISOString() // Mantiene el registro de última modificación general
     };
 
     const updatedPackagesList = mapPackagesFromApi(packagesMock);
