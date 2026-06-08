@@ -4,7 +4,7 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 type PackageCardProps = {
   trackingCode: string;
   address: string;
-  addressDetail?: string;
+  addressDetail: string | null;
 };
 
 export function PackageCard({
