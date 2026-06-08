@@ -1,7 +1,7 @@
 import { PackageApiResponse } from "@/types/api/PackageApiResponse";
 import { Package } from "@/types/domain/Package";
 
-export const mapPackageFromAPI = (raw: PackageApiResponse): Package => ({
+export const mapPackageFromApi = (raw: PackageApiResponse): Package => ({
   id: raw.id,
   trackingCode: raw.tracking_code,
   recipientName: raw.recipient_name,
@@ -16,4 +16,4 @@ export const mapPackageFromAPI = (raw: PackageApiResponse): Package => ({
 });
 
 export const mapPackagesFromApi = (raw: PackageApiResponse[]): Package[] =>
-  raw.map(mapPackageFromAPI);
+  raw.map(mapPackageFromApi);

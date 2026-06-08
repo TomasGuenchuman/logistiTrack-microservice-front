@@ -7,10 +7,10 @@ export type PackageApiResponse = {
   recipient_name: string;
   recipient_document: string;
   address: string;
-  address_detail?: string;
   status: PackageStatus;
-  courier_id?: string;
-  delivered_at?: string;
+  address_detail: string | null;
+  courier_id: string | null;
+  delivered_at: string | null;
   created_at: string;
   updated_at: string;
 };

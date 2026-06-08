@@ -1,10 +1,13 @@
-// funciona para un formato de timestamp YYYY-MM-DD HH:mm:ss ART
-export function formatTime(timestamp: string | undefined): string {
-  if (!timestamp || timestamp.trim() === "") {
+export function formatTime(timestamp: string | null | undefined): string {
+  if (!timestamp?.trim()) {
     return "";
   }
 
   const date = new Date(timestamp);
+
+  if (isNaN(date.getTime())) {
+    return "";
+  }
 
   return date.toLocaleTimeString("es-AR", {
     hour: "2-digit",
