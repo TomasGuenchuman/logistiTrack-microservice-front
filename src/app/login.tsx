@@ -1,3 +1,6 @@
+import { useState } from "react";
+import axios from "axios";
+import { API_URLS } from "../api/endpoints";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import {
@@ -19,11 +22,40 @@ import { useAuth } from "../context/AuthContext";
 
 export default function LoginScreen() {
   const { login } = useAuth();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading,setIsLoading] = useState(false);
 
-  function handleLogin() {
-    login();
+  async function handleLogin() {
+    if (!email || !password) {
+      alert("Por favor, completá todos los campos.");
+      return;
+    }
 
-    router.replace("/"); // ENTRA A: "/(app)/(tabs)"
+    try {
+      setIsLoading(true);
+
+      const response = await axios.post(`${API_URLS.BASE}${API_URLS.AUTH.LOGIN}`, {
+        email: email.trim().toLowerCase(),
+        password: password
+      });
+
+      const { access_token, refresh_token } = response.data;
+
+      await login(access_token, refresh_token);
+
+      router.replace("/(tabs)");
+
+    } catch (error: any) {
+
+      const data = error.response?.data;
+      console.log("ERRORES DEL BACKEND:", data);
+      
+      const mensajeReal = data?.authServiceMessage || data?.message || "Error al intentar iniciar sesión";
+      alert(mensajeReal);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -48,9 +80,10 @@ export default function LoginScreen() {
 
               <TextInput
                 style={styles.input}
-                placeholder="Email"
+                placeholder="Correo electrónico"
+                value={email}
+                onChangeText={setEmail}
                 autoCapitalize="none"
-                keyboardType="email-address"
               />
             </View>
           </View>
@@ -66,6 +99,8 @@ export default function LoginScreen() {
             <TextInput
               style={styles.input}
               placeholder="Contraseña"
+              value={password}
+              onChangeText={setPassword}
               secureTextEntry
             />
           </View>
