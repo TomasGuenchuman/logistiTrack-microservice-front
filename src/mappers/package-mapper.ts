@@ -1,4 +1,4 @@
-import { PackageApiResponse } from "@/types/api/PackageApiResponse";
+import { PackageApiResponse } from "@/types/api/PackageAPIResponse";
 import { Package } from "@/types/domain/Package";
 
 export const mapPackageFromAPI = (raw: PackageApiResponse): Package => ({

@@ -1,10 +1,10 @@
-import { PackageApiResponse } from "@/types/api/PackageApiResponse";
+import { PackageApiResponse } from "@/types/api/PackageAPIResponse";
 
 // mock data igualado a la estructura real que viene del backend
 export const packagesMock: PackageApiResponse[] = [
   {
     id: "1",
-    tracking_code: "TRK-8492",
+    tracking_code: "QR-44556-RG",
     address: "Av. Maipú 1234, Ushuaia",
     address_detail: "Piso 2, Depto B • Carlos Giménez",
     recipient_name: "Carlos Giménez",
@@ -15,8 +15,8 @@ export const packagesMock: PackageApiResponse[] = [
   },
   {
     id: "2",
-    tracking_code: "TRK-9011",
-    address: "San Martín 450, Centro",
+    tracking_code: "QR-90115-RG",
+    address: "San Martín 450, Ushuaia",
     address_detail: 'Planta Baja • Local "El Sol"',
     recipient_name: "Local El Sol",
     recipient_document: "98765432",
@@ -26,7 +26,7 @@ export const packagesMock: PackageApiResponse[] = [
   },
   {
     id: "3",
-    tracking_code: "TRK-8492",
+    tracking_code: "QR-99283-GT",
     address: "Av. Maipú 1234, Ushuaia",
     address_detail: "Piso 2, Depto B - Timbre Azul",
     recipient_name: "Juan Pérez",
@@ -37,8 +37,8 @@ export const packagesMock: PackageApiResponse[] = [
   },
   {
     id: "4",
-    tracking_code: "TRK-7301",
-    address: "Gobernador Paz 870",
+    tracking_code: "QR-70301-RG",
+    address: "Gobernador Paz 870, Ushuaia",
     address_detail: "Casa 2 • Portón negro",
     recipient_name: "María López",
     recipient_document: "23456789",
@@ -49,7 +49,7 @@ export const packagesMock: PackageApiResponse[] = [
   },
   {
     id: "5",
-    tracking_code: "TRK-5520",
+    tracking_code: "QR-55201-RG",
     address: "Kuanip 1200",
     address_detail: "Local comercial",
     recipient_name: "Ferretería Austral",

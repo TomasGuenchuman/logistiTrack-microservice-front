@@ -15,6 +15,7 @@ type TabButtonProps = {
   onPress: () => void;
 };
 
+// Componente de pestañas para filtrar paquetes por estado, mostrando conteo en cada una
 function TabButton({ label, active, onPress }: TabButtonProps) {
   return (
     <Pressable
@@ -28,6 +29,7 @@ function TabButton({ label, active, onPress }: TabButtonProps) {
   );
 }
 
+// Componente de pestañas para filtrar paquetes por estado, mostrando conteo en cada una
 export function PackageTabs({
   activeTab,
   onChangeTab,

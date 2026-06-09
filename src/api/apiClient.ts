@@ -3,6 +3,8 @@ import { API_URLS } from './endpoints';
 import { TokenService } from '../services/token-service';
 import { AuthService } from '../services/auth-service';
 
+const API_URL = process.env.EXPO_PUBLIC_API_URL;
+
 export const apiClient = axios.create({
   baseURL: API_URLS.BASE, // API Gateway
 });

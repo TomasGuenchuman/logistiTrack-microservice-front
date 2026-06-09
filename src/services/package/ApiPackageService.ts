@@ -106,4 +106,8 @@ export interface UpdatePackagePayload {
 
 export interface UpdatePackageStatusPayload {
   status: PackageStatus;
+<<<<<<< HEAD
 } */
+=======
+} */
+>>>>>>> main
