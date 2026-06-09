@@ -1,30 +1,34 @@
+import { apiClient } from "@/api/apiClient";
 import { packagesMock } from "@/data/packages-mock";
-import { mapPackagesFromApi } from "@/mappers/package-mapper";
+import {
+  mapPackageFromApi,
+  mapPackagesFromApi,
+} from "@/mappers/package-mapper";
+import { PackageApiResponse } from "@/types/api/PackageApiResponse";
 import { Package } from "@/types/domain/Package";
 import { PackageService } from "./PackageService";
 
-// SIN IMPLEMENTAR: Este servicio es un esqueleto para la futura implementación real que se conectará a una API REST.
-
 export class ApiPackageService implements PackageService {
   async getPackages(): Promise<Package[]> {
-    // Simulo una llamada a la API con un retraso
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    // Retorno los datos mock mapeados a la estructura del dominio (front)
-    return mapPackagesFromApi(packagesMock);
+    const response = await apiClient.get<PackageApiResponse[]>("/packages");
+    // Retorno los paquetes mapeados a la estructura del dominio (front)
+    return mapPackagesFromApi(response.data);
+  }
+
+  async getPackageById(id: string): Promise<Package | null> {
+    const response = await apiClient.get<PackageApiResponse>(`/packages/${id}`);
+    // Retorno el paquete mapeado a la estructura del dominio (front)
+    return mapPackageFromApi(response.data);
   }
 
   async getPackageByTrackingCode(
     trackingCode: string,
-  ): Promise<Package | undefined> {
-    // Simulo una llamada a la API con un retraso
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    // Primero mapeo los datos mock a la estructura del dominio (front)
-    // con el objetivo de que la búsqueda se haga sobre los campos
-    // que el dominio (front) conoce y utiliza, en este caso el trackingCode
-    // Logrando así desacoplar la búsqueda del formato de la api (backend)
-    const packages = mapPackagesFromApi(packagesMock);
-    // Retorno el paquete encontrado o undefined si no se encuentra
-    return packages.find((pkg) => pkg.trackingCode === trackingCode);
+  ): Promise<Package | null> {
+    const response = await apiClient.get<PackageApiResponse>(
+      `/packages/tracking/${trackingCode}`,
+    );
+
+    return mapPackageFromApi(response.data);
   }
 
   async getPackagesByCourierId(courierId: string): Promise<Package[]> {
@@ -33,13 +37,6 @@ export class ApiPackageService implements PackageService {
     const packages = mapPackagesFromApi(packagesMock);
     // Retorno los paquetes mockeados mapeados a la estructura del dominio (front)
     return packages.filter((pkg) => pkg.courierId === courierId);
-  }
-  async getPackageById(id: string): Promise<Package | undefined> {
-    // Simulo una llamada a la API con un retraso
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    // Retorno el paquete mockeado mapeado a la estructura del dominio (front)
-    const packages = mapPackagesFromApi(packagesMock);
-    return packages.find((pkg) => pkg.id === id);
   }
 
   /* async createPackage(data: CreatePackagePayload): Promise<PackageApiResponse> {
