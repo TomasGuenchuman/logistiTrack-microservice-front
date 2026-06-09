@@ -11,9 +11,10 @@ import { useState } from "react";
 import { ScrollView, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+// Pantalla principal con tabs para paquetes pendientes, en tránsito y entregados
 export default function HomeScreen() {
   const [activeTab, setActiveTab] = useState<PackageStatus>("PENDING");
-  const packages = usePackages();
+  const { packages, fetchPackages } = usePackages();
   const pendingPackages = usePackagesByStatus(packages, "PENDING");
   const inTransitPackages = usePackagesByStatus(packages, "IN_TRANSIT");
   const deliveredPackages = usePackagesByStatus(packages, "DELIVERED");
@@ -38,17 +39,16 @@ export default function HomeScreen() {
 
         {activeTab === "PENDING" &&
           pendingPackages.map((pkg) => (
-            <PackageCard
-              key={pkg.id}
-              trackingCode={pkg.trackingCode}
-              address={pkg.address}
-              addressDetail={pkg.addressDetail}
-            />
-          ))}
+          <PackageCard
+          key={pkg.id}
+          pkg={pkg} // <-- Le pasás el paquete entero de la iteración
+          onRefresh={fetchPackages} // <-- Le pasás la función de refresco para actualizar la lista después de iniciar el viaje
+        />
+  ))}
 
         {activeTab === "IN_TRANSIT" &&
           inTransitPackages.map((pkg) => (
-            <InTransitCard key={pkg.id} pkg={pkg} />
+            <InTransitCard key={pkg.id} pkg={pkg} onRefresh={fetchPackages} />
           ))}
 
         {activeTab === "DELIVERED" &&

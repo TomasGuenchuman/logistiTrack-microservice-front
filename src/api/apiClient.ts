@@ -1,10 +1,11 @@
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 
+// ip de servidor y puerto de API Gateway, configurar tu ip en un .env global
 const API_URL = process.env.API_URL;
 
 export const apiClient = axios.create({
-  baseURL: API_URL, // API Gateway, configurar ip en .env
+  baseURL: API_URL,
 });
 
 apiClient.interceptors.request.use(async (config) => {

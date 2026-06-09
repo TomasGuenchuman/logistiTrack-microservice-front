@@ -1,107 +1,75 @@
 import { packagesMock } from "@/data/packages-mock";
 import { mapPackagesFromApi } from "@/mappers/package-mapper";
 import { Package } from "@/types/domain/Package";
+import { PackageStatus } from "@/types/PackageStatus";
 import { PackageService } from "./PackageService";
 
+// Definimos los payloads que necesita el contrato (pueden migrarse a un archivo de tipos si prefieren)
+export interface UpdatePackagePayload {
+  status?: PackageStatus;
+  courierId?: string;
+  deliveredAt?: string; // Campo adicional para registrar la fecha de entrega
+}
+
+// Esta clase simula el comportamiento de un servicio real, pero usando datos mockeados en memoria.
 export class MockPackageService implements PackageService {
   async getPackages(): Promise<Package[]> {
-    // Simulo una llamada a la API con un retraso
     await new Promise((resolve) => setTimeout(resolve, 500));
-    // Retorno los datos mock mapeados a la estructura del dominio (front)
     return mapPackagesFromApi(packagesMock);
   }
 
-  async getPackageByTrackingCode(
-    trackingCode: string,
-  ): Promise<Package | undefined> {
-    // Simulo una llamada a la API con un retraso
+  // Implementamos el método de búsqueda por código de seguimiento, simulando una consulta a la base de datos.
+  async getPackageByTrackingCode(trackingCode: string): Promise<Package | undefined> {
     await new Promise((resolve) => setTimeout(resolve, 500));
-    // Primero mapeo los datos mock a la estructura del dominio (front)
-    // con el objetivo de que la búsqueda se haga sobre los campos
-    // que el dominio (front) conoce y utiliza, en este caso el trackingCode
-    // Logrando así desacoplar la búsqueda y el formato de la api (backend)
     const packages = mapPackagesFromApi(packagesMock);
-    // Retorno el paquete encontrado o undefined si no se encuentra
     return packages.find((pkg) => pkg.trackingCode === trackingCode);
   }
 
+  // Método adicional para obtener paquetes por ID de courier, útil para la funcionalidad de "Mi Ruta"
   async getPackagesByCourierId(courierId: string): Promise<Package[]> {
-    // Simulo una llamada a la API con un retraso
     await new Promise((resolve) => setTimeout(resolve, 500));
     const packages = mapPackagesFromApi(packagesMock);
-    // Retorno los paquetes mockeados mapeados a la estructura del dominio (front)
     return packages.filter((pkg) => pkg.courierId === courierId);
   }
+
+  // Método adicional para obtener un paquete por su ID, útil para detalles específicos o actualizaciones
   async getPackageById(id: string): Promise<Package | undefined> {
-    // Simulo una llamada a la API con un retraso
     await new Promise((resolve) => setTimeout(resolve, 500));
-    // Retorno el paquete mockeado mapeado a la estructura del dominio (front)
     const packages = mapPackagesFromApi(packagesMock);
     return packages.find((pkg) => pkg.id === id);
   }
 
-  /* async createPackage(data: CreatePackagePayload): Promise<PackageApiResponse> {
-    // Simulo una llamada a la API con un retraso
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    // Retorno la respuesta mockeada
-    return {
-      id: `package-${Date.now()}`,
-      ...data,
-    };
-  }
+  // IMPLEMENTACIÓN DE ACTUALIZACIÓN EN MEMORIA
+  // Esto permite que al tocar "AGREGAR A MI RUTA" el estado cambie de verdad en el array falso
   async updatePackage(
-    id: string,
-    data: UpdatePackagePayload,
-  ): Promise<PackageApiResponse> {
-    // Simulo una llamada a la API con un retraso
+    id: string, 
+    data: { status?: any; courierId?: string; deliveredAt?: string } // <-- Agregamos deliveredAt acá
+  ): Promise<Package> {
     await new Promise((resolve) => setTimeout(resolve, 500));
-    // Retorno la respuesta mockeada
-    return {
-      id: `package-${Date.now()}`,
-      ...data,
+    
+    const pkgIndex = packagesMock.findIndex((p) => p.id === id);
+    
+    if (pkgIndex === -1) {
+      throw new Error(`Package with ID ${id} not found.`);
+    }
+
+    // Mapeamos las actualizaciones del front al formato snake_case del mock/back
+    const updateData: Record<string, any> = {};
+    if (data.status) updateData.status = data.status;
+    if (data.courierId) updateData.courier_id = data.courierId;
+    
+    // Si desde el modal de firma mandamos la hora de entrega, la traducimos a delivered_at
+    if (data.deliveredAt) {
+      updateData.delivered_at = data.deliveredAt;
+    }
+
+    packagesMock[pkgIndex] = {
+      ...packagesMock[pkgIndex],
+      ...updateData,
+      updated_at: new Date().toISOString() // Mantiene el registro de última modificación general
     };
-  } */
-  /* async updatePackageStatus(
-    id: string,
-    data: UpdatePackageStatusPayload,
-  ): Promise<PackageApiResponse> {
-    // Simulo una llamada a la API con un retraso
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    // Retorno la respuesta mockeada
-    return {
-      id: `package-${Date.now()}`,
-    };
-  } */
-  /* async markPackageAsDelivered(id: string): Promise<PackageApiResponse> {
-    const response = await apiClient.patch<PackageApiResponse>(
-      `/packages/${id}/delivered`,
-    );
-    return response.data;
+
+    const updatedPackagesList = mapPackagesFromApi(packagesMock);
+    return updatedPackagesList.find((p) => p.id === id)!;
   }
-
-  async deletePackage(id: string): Promise<void> {
-    await apiClient.delete(`/packages/${id}`);
-  } */
 }
-
-/* export interface CreatePackagePayload {
-  trackingCode: string;
-  recipientName: string;
-  recipientDocument: string;
-  address: string;
-  status?: PackageStatus;
-  courierId: string;
-}
-
-export interface UpdatePackagePayload {
-  trackingCode?: string;
-  recipientName?: string;
-  recipientDocument?: string;
-  address?: string;
-  status?: PackageStatus;
-  courierId?: string;
-}
-
-export interface UpdatePackageStatusPayload {
-  status: PackageStatus;
-} */
