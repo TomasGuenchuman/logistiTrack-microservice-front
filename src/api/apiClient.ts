@@ -1,16 +1,22 @@
-import axios from 'axios';
-import * as SecureStore from 'expo-secure-store';
+import axios from "axios";
+import * as SecureStore from "expo-secure-store";
+
+const API_URL = process.env.API_URL;
 
 export const apiClient = axios.create({
-  baseURL: 'http://192.168.1.35:3000', // API Gateway
+  baseURL: API_URL, // API Gateway, configurar ip en .env
 });
 
 apiClient.interceptors.request.use(async (config) => {
-  const token = await SecureStore.getItemAsync('accessToken');
-
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+  try {
+    const token = await SecureStore.getItemAsync("accessToken");
+    console.log("Interceptor ejecutado");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  } catch (error) {
+    console.error("Full diagnostic logs:", error);
+    return config;
   }
-
-  return config;
 });
