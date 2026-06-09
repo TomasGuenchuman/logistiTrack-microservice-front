@@ -1,20 +1,7 @@
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
-import {
-  ArrowRight,
-  LockKeyhole,
-  Mail,
-  Sparkles,
-  Truck,
-} from "lucide-react-native";
-import {
-  ImageBackground,
-  Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { ArrowRight, LockKeyhole, Mail, Sparkles, Truck } from "lucide-react-native";
+import { ImageBackground, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { useAuth } from "../context/AuthContext";
 
 export default function LoginScreen() {

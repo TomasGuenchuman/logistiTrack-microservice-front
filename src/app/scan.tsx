@@ -3,10 +3,7 @@ import { useFocusEffect, useRouter } from "expo-router";
 import { ArrowLeft, Keyboard, ScanLine, Truck, Zap } from "lucide-react-native";
 import { useCallback, useState } from "react";
 import { Dimensions, Pressable, StyleSheet, Text, View } from "react-native";
-import {
-  SafeAreaView,
-  useSafeAreaInsets,
-} from "react-native-safe-area-context";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 
 const { width } = Dimensions.get("window");
 
@@ -28,24 +25,30 @@ export default function ScanScreen() {
     }, []),
   );
 
+  // ACCIÓN DEL BOTÓN MANUAL: Te permite testear ingresando un código si estás en la PC sin cámara
   const handleManualEntry = () => {
-    console.log("Manual entry");
+    // Código de prueba que cargamos en los mocks de Juan Pérez
+    const defaultMockCode = "QR-99283-GT"; 
+    
+    router.push(`/package/${defaultMockCode}`);
   };
 
+  // MANEJO REAL DEL ESCANEO DE QR
   const handleQRCodeScanned = ({ data }: { data: string }) => {
     if (scanned) return;
 
     setScanned(true);
     console.log("QR escaneado:", data);
 
-    router.replace({
-      pathname: "/package/[trackingCode]",
-      params: {
-        trackingCode: data,
-      },
-    });
+    // Limpiamos espacios en blanco o saltos de línea por si el QR viene sucio
+    const cleanTrackingCode = data.trim();
+
+    // Redirección nativa limpia para rutas dinámicas en Expo Router
+    router.push(`/package/${cleanTrackingCode}`);
   };
 
+
+  // Si el permiso aún no se ha solicitado, mostramos una pantalla de carga
   if (!permission) {
     return (
       <View style={styles.loadingContainer}>
@@ -53,6 +56,8 @@ export default function ScanScreen() {
       </View>
     );
   }
+
+  // Si el permiso no está concedido, mostramos una pantalla para solicitarlo
 
   if (!permission.granted) {
     return (
@@ -73,13 +78,14 @@ export default function ScanScreen() {
     );
   }
 
+  // Si el permiso está concedido, mostramos la cámara para escanear códigos QR
   return (
     <View style={styles.container}>
       <CameraView
         style={StyleSheet.absoluteFill}
         facing="back"
         barcodeScannerSettings={{
-          barcodeTypes: ["qr"],
+          barcodeTypes: ["qr", "code128", "ean13", "pdf417"], // Puedes ajustar los tipos de códigos que quieres escanear
         }}
         onBarcodeScanned={scanned ? undefined : handleQRCodeScanned}
       />
