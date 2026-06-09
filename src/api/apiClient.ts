@@ -1,23 +1,43 @@
 import axios from "axios";
-import * as SecureStore from "expo-secure-store";
-
-// ip de servidor y puerto de API Gateway, configurar tu ip en un .env global
-const API_URL = process.env.API_URL;
+import { AuthService } from "../services/auth-service";
+import { TokenService } from "../services/token-service";
+import { API_URLS } from "./endpoints";
 
 export const apiClient = axios.create({
-  baseURL: API_URL,
+  baseURL: API_URLS.BASE,
 });
 
+// interceptor de ida donde le agrega el token a cada request
 apiClient.interceptors.request.use(async (config) => {
-  try {
-    const token = await SecureStore.getItemAsync("accessToken");
-    console.log("Interceptor ejecutado");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  } catch (error) {
-    console.error("Full diagnostic logs:", error);
-    return config;
+  const token = await TokenService.getAccessToken();
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
   }
+
+  return config;
 });
+
+// "interceptor" de vuelta donde maneja los errores 401 y renueva el token automáticamente si corresponde
+apiClient.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  async (error) => {
+    const originalRequest = error.config;
+
+    // si el error es 401 evito el bucle
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      const newAccessToken = await AuthService.refreshToken();
+
+      if (newAccessToken) {
+        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+        return apiClient(originalRequest);
+      }
+    }
+
+    return Promise.reject(error);
+  },
+);
