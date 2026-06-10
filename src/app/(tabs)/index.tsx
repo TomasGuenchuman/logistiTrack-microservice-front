@@ -39,12 +39,12 @@ export default function HomeScreen() {
 
         {activeTab === "PENDING" &&
           pendingPackages.map((pkg) => (
-          <PackageCard
-          key={pkg.id}
-          pkg={pkg} // <-- Le pasás el paquete entero de la iteración
-          onRefresh={fetchPackages} // <-- Le pasás la función de refresco para actualizar la lista después de iniciar el viaje
-        />
-  ))}
+            <PackageCard
+              key={pkg.id}
+              pkg={pkg} // <-- Le pasás el paquete entero de la iteración
+              onRefresh={fetchPackages} // <-- Le pasás la función de refresco para actualizar la lista después de iniciar el viaje
+            />
+          ))}
 
         {activeTab === "IN_TRANSIT" &&
           inTransitPackages.map((pkg) => (

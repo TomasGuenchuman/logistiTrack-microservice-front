@@ -1,17 +1,30 @@
-import { useState } from "react";
+import { API_URLS } from "@/api/endpoints";
+import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
-import { API_URLS } from "../api/endpoints";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
-import { ArrowRight, LockKeyhole, Mail, Sparkles, Truck } from "lucide-react-native";
-import { ImageBackground, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
-import { useAuth } from "../context/AuthContext";
+import {
+  ArrowRight,
+  LockKeyhole,
+  Mail,
+  Sparkles,
+  Truck,
+} from "lucide-react-native";
+import { useState } from "react";
+import {
+  ImageBackground,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 
 export default function LoginScreen() {
   const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoading,setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   async function handleLogin() {
     if (!email || !password) {
@@ -22,9 +35,11 @@ export default function LoginScreen() {
     try {
       setIsLoading(true);
 
-      const response = await axios.post(`${API_URLS.BASE}${API_URLS.AUTH.LOGIN}`, {
+      const endpoint = `${API_URLS.BASE}${API_URLS.AUTH.LOGIN}`;
+
+      const response = await axios.post(endpoint, {
         email: email.trim().toLowerCase(),
-        password: password
+        password: password,
       });
 
       const { access_token, refresh_token } = response.data;
@@ -32,13 +47,18 @@ export default function LoginScreen() {
       await login(access_token, refresh_token);
 
       router.replace("/(tabs)");
-
     } catch (error: any) {
-
       const data = error.response?.data;
       console.log("ERRORES DEL BACKEND:", data);
-      
-      const mensajeReal = data?.authServiceMessage || data?.message || "Error al intentar iniciar sesión";
+      console.log("ERROR COMPLETO:", error);
+      console.log("RESPONSE:", error.response);
+      console.log("REQUEST:", error.request);
+      console.log("MESSAGE:", error.message);
+
+      const mensajeReal =
+        data?.authServiceMessage ||
+        data?.message ||
+        "Error al intentar iniciar sesión";
       alert(mensajeReal);
     } finally {
       setIsLoading(false);

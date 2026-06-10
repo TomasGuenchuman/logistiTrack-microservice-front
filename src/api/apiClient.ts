@@ -1,7 +1,7 @@
+import { API_URLS } from "@/api/endpoints";
+import { AuthService } from "@/services/auth-service";
+import { TokenService } from "@/services/token-service";
 import axios from "axios";
-import { AuthService } from "../services/auth-service";
-import { TokenService } from "../services/token-service";
-import { API_URLS } from "./endpoints";
 
 export const apiClient = axios.create({
   baseURL: API_URLS.BASE,
