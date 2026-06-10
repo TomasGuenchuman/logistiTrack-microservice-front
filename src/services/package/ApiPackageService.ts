@@ -1,18 +1,19 @@
 import { apiClient } from "@/api/apiClient";
-import { packagesMock } from "@/data/packages-mock";
 import {
   mapPackageFromApi,
   mapPackagesFromApi,
 } from "@/mappers/package-mapper";
 import { PackageApiResponse } from "@/types/api/PackageApiResponse";
 import { Package } from "@/types/domain/Package";
+import { UpdatePackageDto } from "@/types/dtos/UpdatePackageDto";
 import { PackageService } from "./PackageService";
 
 export class ApiPackageService implements PackageService {
   async getPackages(): Promise<Package[]> {
     const response = await apiClient.get<PackageApiResponse[]>("/packages");
     // Retorno los paquetes mapeados a la estructura del dominio (front)
-    return mapPackagesFromApi(response.data);
+    const paquetesMapeados = mapPackagesFromApi(response.data);
+    return paquetesMapeados;
   }
 
   async getPackageById(id: string): Promise<Package | null> {
@@ -32,11 +33,23 @@ export class ApiPackageService implements PackageService {
   }
 
   async getPackagesByCourierId(courierId: string): Promise<Package[]> {
-    // Simulo una llamada a la API con un retraso
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    const packages = mapPackagesFromApi(packagesMock);
-    // Retorno los paquetes mockeados mapeados a la estructura del dominio (front)
-    return packages.filter((pkg) => pkg.courierId === courierId);
+    const response = await apiClient.get<PackageApiResponse[]>(
+      `/packages/courier/${courierId}`,
+    );
+
+    const packages = mapPackagesFromApi(response.data);
+    return packages;
+  }
+
+  async updatePackage(
+    id: string,
+    data: UpdatePackageDto,
+  ): Promise<Package | null> {
+    const response = await apiClient.patch<PackageApiResponse>(
+      `/packages/${id}`,
+      data,
+    );
+    return mapPackageFromApi(response.data);
   }
 
   /* async createPackage(data: CreatePackagePayload): Promise<PackageApiResponse> {
