@@ -1,15 +1,11 @@
 import { packagesMock } from "@/data/packages-mock";
-import { mapPackagesFromApi } from "@/mappers/package-mapper";
+import {
+  mapPackageFromApi,
+  mapPackagesFromApi,
+} from "@/mappers/package-mapper";
+import { PackageService } from "@/services/package/PackageService";
 import { Package } from "@/types/domain/Package";
-import { PackageStatus } from "@/types/PackageStatus";
-import { PackageService } from "./PackageService";
-
-// Definimos los payloads que necesita el contrato (pueden migrarse a un archivo de tipos si prefieren)
-export interface UpdatePackagePayload {
-  status?: PackageStatus;
-  courierId?: string;
-  deliveredAt?: string; // Campo adicional para registrar la fecha de entrega
-}
+import { UpdatePackageDto } from "@/types/dtos/UpdatePackageDto";
 
 // Esta clase simula el comportamiento de un servicio real, pero usando datos mockeados en memoria.
 export class MockPackageService implements PackageService {
@@ -19,10 +15,12 @@ export class MockPackageService implements PackageService {
   }
 
   // Implementamos el método de búsqueda por código de seguimiento, simulando una consulta a la base de datos.
-  async getPackageByTrackingCode(trackingCode: string): Promise<Package | undefined> {
+  async getPackageByTrackingCode(
+    trackingCode: string,
+  ): Promise<Package | null> {
     await new Promise((resolve) => setTimeout(resolve, 500));
     const packages = mapPackagesFromApi(packagesMock);
-    return packages.find((pkg) => pkg.trackingCode === trackingCode);
+    return packages.find((pkg) => pkg.trackingCode === trackingCode) || null;
   }
 
   // Método adicional para obtener paquetes por ID de courier, útil para la funcionalidad de "Mi Ruta"
@@ -33,43 +31,41 @@ export class MockPackageService implements PackageService {
   }
 
   // Método adicional para obtener un paquete por su ID, útil para detalles específicos o actualizaciones
-  async getPackageById(id: string): Promise<Package | undefined> {
+  async getPackageById(id: string): Promise<Package | null> {
     await new Promise((resolve) => setTimeout(resolve, 500));
     const packages = mapPackagesFromApi(packagesMock);
-    return packages.find((pkg) => pkg.id === id);
+    return packages.find((pkg) => pkg.id === id) || null;
   }
 
-  // IMPLEMENTACIÓN DE ACTUALIZACIÓN EN MEMORIA
-  // Esto permite que al tocar "AGREGAR A MI RUTA" el estado cambie de verdad en el array falso
+  // IMPLEMENTACIÓN DE ACTUALIZACIÓN DE PAQUETES MOCK
+  // Esto permite que al tocar "AGREGAR A MI RUTA" el estado cambie de verdad en paquetes mock
   async updatePackage(
-    id: string, 
-    data: { status?: any; courierId?: string; deliveredAt?: string } // <-- Agregamos deliveredAt acá
-  ): Promise<Package> {
+    id: string,
+    data: UpdatePackageDto,
+  ): Promise<Package | null> {
     await new Promise((resolve) => setTimeout(resolve, 500));
-    
+
     const pkgIndex = packagesMock.findIndex((p) => p.id === id);
-    
+
     if (pkgIndex === -1) {
-      throw new Error(`Package with ID ${id} not found.`);
+      throw new Error(`Paquete con id: "${id}" no encontrado.`);
     }
 
     // Mapeamos las actualizaciones del front al formato snake_case del mock/back
-    const updateData: Record<string, any> = {};
-    if (data.status) updateData.status = data.status;
-    if (data.courierId) updateData.courier_id = data.courierId;
-    
-    // Si desde el modal de firma mandamos la hora de entrega, la traducimos a delivered_at
-    if (data.deliveredAt) {
-      updateData.delivered_at = data.deliveredAt;
-    }
+    const updateData: UpdatePackageDto = {};
+    if (data.status !== undefined) updateData.status = data.status;
+    if (data.courierId !== undefined) updateData.courierId = data.courierId;
+    // Si desde el modal de firma mandamos la hora de entrega
+    if (data.deliveredAt !== undefined)
+      updateData.deliveredAt = data.deliveredAt;
 
     packagesMock[pkgIndex] = {
       ...packagesMock[pkgIndex],
       ...updateData,
-      updated_at: new Date().toISOString() // Mantiene el registro de última modificación general
+      updatedAt: new Date().toISOString(), // Mantiene el registro de última modificación general
     };
 
-    const updatedPackagesList = mapPackagesFromApi(packagesMock);
-    return updatedPackagesList.find((p) => p.id === id)!;
+    const updatedMockPackage = packagesMock[pkgIndex];
+    return mapPackageFromApi(updatedMockPackage);
   }
 }
