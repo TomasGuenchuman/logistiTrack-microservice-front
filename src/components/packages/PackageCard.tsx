@@ -1,9 +1,18 @@
 import { packageService } from "@/services/index";
 import { Package } from "@/types/domain/Package";
-import { openMapWithAddress, openMapWithInstructions } from "@/utils/navigationUtils"; // Importamos la función centralizada para abrir el mapa
+import {
+  openMapWithAddress,
+  openMapWithInstructions,
+} from "@/utils/navigationUtils"; // Importamos la función centralizada para abrir el mapa
 import { Map } from "lucide-react-native";
 import { useState } from "react";
-import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 
 // Componente de tarjeta de paquete con acciones para ver mapa e iniciar viaje
 type PackageCardProps = {
@@ -23,12 +32,12 @@ export function PackageCard({ pkg, onRefresh }: PackageCardProps) {
   const handleStartTrip = async () => {
     try {
       setLoading(true); // Iniciamos el estado de carga para este paquete específico
-      
+
       // 1. Cambiamos el estado en la arquitectura (Mocks/API)
       await packageService.updatePackage(pkg.id, { status: "IN_TRANSIT" });
 
       onRefresh?.(); // Refrescamos la lista de paquetes en la pantalla principal, si se proporcionó la función
-      
+
       // 2. Lanzamos el modo indicaciones directo
       openMapWithInstructions(pkg.address);
     } catch (error) {
@@ -45,7 +54,9 @@ export function PackageCard({ pkg, onRefresh }: PackageCardProps) {
       </View>
 
       <Text style={styles.address}>{pkg.address}</Text>
-      {pkg.addressDetail && <Text style={styles.detail}>{pkg.addressDetail}</Text>}
+      {pkg.addressDetail && (
+        <Text style={styles.detail}>{pkg.addressDetail}</Text>
+      )}
 
       <View style={styles.actionsRow}>
         {/* BOTÓN VER MAPA */}
@@ -55,7 +66,7 @@ export function PackageCard({ pkg, onRefresh }: PackageCardProps) {
         </Pressable>
 
         {/* BOTÓN INICIAR VIAJE CON INDICADOR DE CARGA */}
-        <Pressable 
+        <Pressable
           style={[styles.startButton, loading && { opacity: 0.7 }]} // Aplicamos un estilo de opacidad cuando está cargando
           onPress={handleStartTrip}
           disabled={loading}

@@ -1,12 +1,10 @@
-import axios from 'axios';
-import { API_URLS } from './endpoints';
-import { TokenService } from '../services/token-service';
-import { AuthService } from '../services/auth-service';
-
-const API_URL = process.env.EXPO_PUBLIC_API_URL;
+import { API_URLS } from "@/api/endpoints";
+import { AuthService } from "@/services/auth-service";
+import { TokenService } from "@/services/token-service";
+import axios from "axios";
 
 export const apiClient = axios.create({
-  baseURL: API_URLS.BASE, // API Gateway
+  baseURL: API_URLS.BASE,
 });
 
 // interceptor de ida donde le agrega el token a cada request
@@ -19,8 +17,6 @@ apiClient.interceptors.request.use(async (config) => {
 
   return config;
 });
-
-
 
 // "interceptor" de vuelta donde maneja los errores 401 y renueva el token automáticamente si corresponde
 apiClient.interceptors.response.use(
@@ -43,5 +39,5 @@ apiClient.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );

@@ -1,7 +1,12 @@
 import { Package } from "@/types/domain/Package";
+import { UpdatePackageDto } from "@/types/dtos/UpdatePackageDto";
 
 export interface PackageService {
   getPackages(): Promise<Package[]>;
 
-  getPackageByTrackingCode(trackingCode: string): Promise<Package | undefined>;
+  getPackageById(id: string): Promise<Package | null>;
+
+  getPackageByTrackingCode(trackingCode: string): Promise<Package | null>;
+
+  updatePackage(id: string, data: UpdatePackageDto): Promise<Package | null>;
 }

@@ -3,14 +3,14 @@ import { PackageStatus } from "@/types/PackageStatus";
 // reflejo exactamente la entidad real que viene del backend
 export type PackageApiResponse = {
   id: string;
-  tracking_code: string;
-  recipient_name: string;
-  recipient_document: string;
+  trackingCode: string;
+  recipientName: string;
+  recipientDocument: string;
   address: string;
-  address_detail?: string;
   status: PackageStatus;
-  courier_id?: string;
-  delivered_at?: string;
-  created_at: string;
-  updated_at: string;
+  addressDetail: string | null;
+  courierId: string | null;
+  deliveredAt: string | null;
+  createdAt: string;
+  updatedAt: string;
 };

@@ -1,19 +1,19 @@
-import { PackageApiResponse } from "@/types/api/PackageAPIResponse";
+import { PackageApiResponse } from "@/types/api/PackageApiResponse";
 import { Package } from "@/types/domain/Package";
 
-export const mapPackageFromAPI = (raw: PackageApiResponse): Package => ({
+export const mapPackageFromApi = (raw: PackageApiResponse): Package => ({
   id: raw.id,
-  trackingCode: raw.tracking_code,
-  recipientName: raw.recipient_name,
-  recipientDocument: raw.recipient_document,
+  trackingCode: raw.trackingCode,
+  recipientName: raw.recipientName,
+  recipientDocument: raw.recipientDocument,
   address: raw.address,
-  addressDetail: raw.address_detail,
+  addressDetail: raw.addressDetail,
   status: raw.status,
-  courierId: raw.courier_id,
-  deliveredAt: raw.delivered_at,
-  createdAt: raw.created_at,
-  updatedAt: raw.updated_at,
+  courierId: raw.courierId,
+  deliveredAt: raw.deliveredAt,
+  createdAt: raw.createdAt,
+  updatedAt: raw.updatedAt,
 });
 
 export const mapPackagesFromApi = (raw: PackageApiResponse[]): Package[] =>
-  raw.map(mapPackageFromAPI);
+  raw.map(mapPackageFromApi);

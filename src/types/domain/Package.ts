@@ -9,10 +9,10 @@ export type Package = {
   recipientName: string;
   recipientDocument: string;
   address: string;
-  addressDetail?: string;
   status: PackageStatus;
-  courierId?: string;
-  deliveredAt?: string;
+  addressDetail: string | null;
+  courierId: string | null;
+  deliveredAt: string | null;
   createdAt: string;
   updatedAt: string;
 };

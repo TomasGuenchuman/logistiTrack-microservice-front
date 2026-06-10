@@ -1,10 +1,11 @@
 export const API_URLS = {
-  // Acá centralizamos la IP de tu API Gateway. A futuro, esto leerá un archivo .env
-  BASE: 'http://192.168.1.21:3000',
-  
+  // API Gateway
+  // consiste en la ip del servidor y el puerto de API Gateway, configurarlo en un .env global
+  BASE: process.env.EXPO_PUBLIC_API_URL_BASE,
+
   AUTH: {
-    LOGIN: '/auth/login',
-    REFRESH: '/auth/refresh',
-    LOGOUT: '/auth/logout',
-  }
+    LOGIN: "/auth/login",
+    REFRESH: "/auth/refresh",
+    LOGOUT: "/auth/logout",
+  },
 };

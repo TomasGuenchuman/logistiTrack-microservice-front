@@ -1,8 +1,18 @@
 import { packageService } from "@/services/index";
 import { X } from "lucide-react-native";
 import React, { useRef, useState } from "react";
-import { ActivityIndicator, Modal, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
-import SignatureScreen, { SignatureViewRef } from "react-native-signature-canvas";
+import {
+  ActivityIndicator,
+  Modal,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
+import SignatureScreen, {
+  SignatureViewRef,
+} from "react-native-signature-canvas";
 
 type DeliverySignatureModalProps = {
   visible: boolean;
@@ -12,12 +22,12 @@ type DeliverySignatureModalProps = {
   onSuccess?: () => void; // Callback opcional para avisarle a la pantalla madre que refresque datos
 };
 
-export function DeliverySignatureModal({ 
-  visible, 
-  onClose, 
-  packageId, 
+export function DeliverySignatureModal({
+  visible,
+  onClose,
+  packageId,
   trackingCode,
-  onSuccess 
+  onSuccess,
 }: DeliverySignatureModalProps) {
   const [dni, setDni] = useState("");
   const [loading, setLoading] = useState(false);
@@ -35,22 +45,21 @@ export function DeliverySignatureModal({
 
       // Capturamos el momento exacto en formato ISO estándar (ej: "2026-06-07T23:01:00.000Z")
       const currentTime = new Date().toISOString();
-      
+
       // Actualizamos el estado del paquete a través de la capa de servicios
-      await packageService.updatePackage(packageId, { 
+      await packageService.updatePackage(packageId, {
         status: "DELIVERED",
         deliveredAt: currentTime,
         // Campos listos para cuando el backend los soporte:
         // recipientDni: dni,
-        // signature: signatureBase64 
+        // signature: signatureBase64
       });
-
       alert(`¡Paquete ${trackingCode} entregado con éxito!`);
-      
+
       // Limpiamos estados locales antes de cerrar
       setDni("");
       signatureRef.current?.clearSignature();
-      
+
       if (onSuccess) onSuccess();
       onClose();
     } catch (error) {
@@ -76,7 +85,6 @@ export function DeliverySignatureModal({
   return (
     <Modal visible={visible} animationType="slide" transparent={false}>
       <View style={styles.modalContainer}>
-        
         {/* Header */}
         <View style={styles.modalHeader}>
           <Text style={styles.modalTitle}>Finalizar Entrega</Text>
@@ -117,11 +125,18 @@ export function DeliverySignatureModal({
 
         {/* Botones Inferiores */}
         <View style={styles.modalActions}>
-          <Pressable style={styles.clearBtn} onPress={() => signatureRef.current?.clearSignature()}>
+          <Pressable
+            style={styles.clearBtn}
+            onPress={() => signatureRef.current?.clearSignature()}
+          >
             <Text style={styles.clearBtnText}>Borrar Firma</Text>
           </Pressable>
 
-          <Pressable style={styles.submitBtn} onPress={triggerSignatureSave} disabled={loading}>
+          <Pressable
+            style={styles.submitBtn}
+            onPress={triggerSignatureSave}
+            disabled={loading}
+          >
             {loading ? (
               <ActivityIndicator size="small" color="#FFFFFF" />
             ) : (
@@ -129,47 +144,46 @@ export function DeliverySignatureModal({
             )}
           </Pressable>
         </View>
-
       </View>
     </Modal>
   );
 }
 
 const styles = StyleSheet.create({
-  modalContainer: { 
-    flex: 1, 
-    backgroundColor: "#F8FAFC", 
-    paddingHorizontal: 24, 
-    paddingTop: 40 
+  modalContainer: {
+    flex: 1,
+    backgroundColor: "#F8FAFC",
+    paddingHorizontal: 24,
+    paddingTop: 40,
   },
-  modalHeader: { 
-    flexDirection: "row", 
-    justifyContent: "space-between", 
-    alignItems: "center", 
-    marginBottom: 4 
-    },
-  modalTitle: { 
-    fontSize: 24, 
-    fontWeight: "800", 
-    color: "#0F172A" 
-    },
-  modalSubtitle: { 
-    fontSize: 15, 
-    color: "#64748B", 
-    marginBottom: 24 
-    },
-  closeModalBtn: { 
-    padding: 4 
-    },
-  inputGroup: { 
-    marginBottom: 20 
-    },
-  label: { 
-    fontSize: 15, 
-    fontWeight: "600", 
-    color: "#334155", 
-    marginBottom: 8 
-    },
+  modalHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 4,
+  },
+  modalTitle: {
+    fontSize: 24,
+    fontWeight: "800",
+    color: "#0F172A",
+  },
+  modalSubtitle: {
+    fontSize: 15,
+    color: "#64748B",
+    marginBottom: 24,
+  },
+  closeModalBtn: {
+    padding: 4,
+  },
+  inputGroup: {
+    marginBottom: 20,
+  },
+  label: {
+    fontSize: 15,
+    fontWeight: "600",
+    color: "#334155",
+    marginBottom: 8,
+  },
   input: {
     height: 54,
     backgroundColor: "#FFFFFF",
