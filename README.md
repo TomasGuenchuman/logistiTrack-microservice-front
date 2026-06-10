@@ -2,13 +2,28 @@
 
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
-## Get started
+---
 
-1. Install dependencies
+## 1. Instalar dependencias
 
-   ```bash
-   npm install
-   ```
+```bash
+npm install
+```
+
+---
+
+## 2. Configurar variables de entorno
+
+Ubicarse en la raíz del proyecto, crear un archivo `.env` y colocar lo siguiente, completando el formato
+del endpoint con la información del servidor que usas.
+
+### .env
+
+```env
+EXPO_PUBLIC_API_URL_BASE=http://<SERVER_IP>:<API_GATEWAY_PORT>
+```
+
+---
 
 2. Start the app
 
