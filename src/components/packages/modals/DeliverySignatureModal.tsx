@@ -1,9 +1,19 @@
 import { useAuth } from "@/context/AuthContext";
-import { packageService, verificationService } from "@/services/index";
+import { verificationService } from "@/services/index";
 import { X } from "lucide-react-native";
 import React, { useRef, useState } from "react";
-import { ActivityIndicator, Modal, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
-import SignatureScreen, { SignatureViewRef } from "react-native-signature-canvas";
+import {
+  ActivityIndicator,
+  Modal,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
+import SignatureScreen, {
+  SignatureViewRef,
+} from "react-native-signature-canvas";
 
 type DeliverySignatureModalProps = {
   visible: boolean;
@@ -45,21 +55,13 @@ export function DeliverySignatureModal({
       // Capturamos el momento exacto en formato ISO estándar (ej: "2026-06-07T23:01:00.000Z")
       const currentTime = new Date().toISOString();
 
-      // Actualizamos el estado del paquete a través de la capa de servicios
-      // 1ra llamada para actualizar el paquete con la info de entrega
-      await packageService.updatePackage(packageId, {
-        status: "DELIVERED",
-        deliveredAt: currentTime,
-      });
-
-      // 2da llamada para registrar la verificación de entrega con la firma digital
       await verificationService.createVerification({
         packageId: packageId,
         recipientDni: dni,
         signature: signatureBase64,
         courierId: courierId || "", // Si está vacío manda un string para evitar fallas del DTO
       });
-      
+
       alert(`¡Paquete ${trackingCode} entregado con éxito!`);
 
       // Limpiamos estados locales antes de cerrar
