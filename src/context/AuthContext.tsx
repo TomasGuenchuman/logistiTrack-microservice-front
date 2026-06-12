@@ -1,11 +1,27 @@
-import { createContext, ReactNode, useContext, useState, useEffect } from "react";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { TokenService } from "../services/token-service";
+
+export type AuthUser = {
+  id: string;
+  email: string;
+};
 
 // Contexto de autenticación para manejar el estado de login/logout en la app
 type AuthContextType = {
+  user: AuthUser | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (accessToken: string, refreshToken: string) => Promise<void>;
+  login: (
+    accessToken: string,
+    refreshToken: string,
+    user: AuthUser,
+  ) => Promise<void>;
   logout: () => Promise<void>;
 };
 
@@ -20,6 +36,7 @@ type AuthProviderProps = {
 export function AuthProvider({ children }: AuthProviderProps) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState<AuthUser | null>(null);
 
   useEffect(() => {
     async function checkAuthStatus() {
@@ -32,8 +49,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
     checkAuthStatus();
   }, []);
 
-  async function login(accessToken: string, refreshToken: string) {
+  async function login(
+    accessToken: string,
+    refreshToken: string,
+    user: AuthUser,
+  ) {
     await TokenService.saveTokens(accessToken, refreshToken);
+    setUser(user);
     setIsAuthenticated(true);
   }
 
@@ -43,7 +65,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, isLoading, login, logout }}>
+    <AuthContext.Provider
+      value={{ user, isAuthenticated, isLoading, login, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );
