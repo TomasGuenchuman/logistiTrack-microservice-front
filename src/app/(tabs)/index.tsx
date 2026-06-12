@@ -4,6 +4,7 @@ import { InTransitCard } from "@/components/packages/InTransitCard";
 import { PackageCard } from "@/components/packages/PackageCard";
 import { PackageProgress } from "@/components/packages/PackageProgress";
 import { PackageTabs } from "@/components/packages/PackageTabs";
+import { useAuth } from "@/context/AuthContext";
 import { usePackages } from "@/hooks/usePackages";
 import { usePackagesByStatus } from "@/hooks/usePackagesByStatus";
 import { PackageStatus } from "@/types/PackageStatus";
@@ -13,8 +14,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 // Pantalla principal con tabs para paquetes pendientes, en tránsito y entregados
 export default function HomeScreen() {
+  const { user } = useAuth();
   const [activeTab, setActiveTab] = useState<PackageStatus>("PENDING");
-  const { packages, fetchPackages } = usePackages();
+  const { packages, fetchPackages } = usePackages(user?.id);
   const pendingPackages = usePackagesByStatus(packages, "PENDING");
   const inTransitPackages = usePackagesByStatus(packages, "IN_TRANSIT");
   const deliveredPackages = usePackagesByStatus(packages, "DELIVERED");
@@ -27,7 +29,14 @@ export default function HomeScreen() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
-        <PackageProgress delivered={deliveredPackages.length} total={15} />
+        <PackageProgress
+          delivered={deliveredPackages.length}
+          total={
+            pendingPackages.length +
+            inTransitPackages.length +
+            deliveredPackages.length
+          }
+        />
 
         <PackageTabs
           activeTab={activeTab}
