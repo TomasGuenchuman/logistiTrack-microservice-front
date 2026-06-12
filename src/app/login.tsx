@@ -42,18 +42,13 @@ export default function LoginScreen() {
         password: password,
       });
 
-      const { access_token, refresh_token } = response.data;
+      const { access_token, refresh_token, user } = response.data;
 
-      await login(access_token, refresh_token);
+      await login(access_token, refresh_token, user);
 
       router.replace("/(tabs)");
     } catch (error: any) {
       const data = error.response?.data;
-      console.log("ERRORES DEL BACKEND:", data);
-      console.log("ERROR COMPLETO:", error);
-      console.log("RESPONSE:", error.response);
-      console.log("REQUEST:", error.request);
-      console.log("MESSAGE:", error.message);
 
       const mensajeReal =
         data?.authServiceMessage ||
