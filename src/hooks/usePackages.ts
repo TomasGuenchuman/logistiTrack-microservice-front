@@ -3,7 +3,7 @@ import { Package } from "@/types/domain/Package";
 import { useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
 
-export function usePackages() {
+export function usePackages(courierId?: string) {
   const [packages, setPackages] = useState<Package[]>([]);
   // Este contador nos va a servir como un "gatillo" manual para forzar la recarga
   const [refreshTrigger, setRefreshTrigger] = useState(0);
@@ -11,7 +11,7 @@ export function usePackages() {
   // Sacamos la función afuera
   const fetchPackages = useCallback(async () => {
     try {
-      const data = await packageService.getPackages();
+      const data = await packageService.getPackagesByCourierId(courierId);
       setPackages(data);
       console.log("Paquetes recargados desde el hook");
     } catch (error) {
