@@ -1,3 +1,4 @@
+import { TokenService } from "@/services/token-service";
 import {
   createContext,
   ReactNode,
@@ -5,7 +6,6 @@ import {
   useEffect,
   useState,
 } from "react";
-import { TokenService } from "../services/token-service";
 
 export type AuthUser = {
   id: string;
@@ -32,7 +32,8 @@ type AuthProviderProps = {
   children: ReactNode;
 };
 
-// Componente proveedor del contexto de autenticación, que envuelve a toda la app para proporcionar el estado de autenticación a cualquier componente que lo necesite
+// Componente proveedor del contexto de autenticación, que envuelve a toda la app
+// para proporcionar el estado de autenticación a cualquier componente que lo necesite
 export function AuthProvider({ children }: AuthProviderProps) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -62,6 +63,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   async function logout() {
     await TokenService.clearTokens();
     setIsAuthenticated(false);
+    setUser(null);
   }
 
   return (
@@ -75,6 +77,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
 export function useAuth() {
   const context = useContext(AuthContext);
+  console.log("Holaa");
 
   if (!context) {
     throw new Error("useAuth debe usarse dentro de AuthProvider");

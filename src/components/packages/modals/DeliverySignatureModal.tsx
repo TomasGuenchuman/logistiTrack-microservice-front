@@ -1,4 +1,5 @@
-import { packageService } from "@/services/index";
+import { useAuth } from "@/context/AuthContext";
+import { verificationService } from "@/services/index";
 import { X } from "lucide-react-native";
 import React, { useRef, useState } from "react";
 import {
@@ -29,6 +30,7 @@ export function DeliverySignatureModal({
   trackingCode,
   onSuccess,
 }: DeliverySignatureModalProps) {
+  const { user } = useAuth();
   const [dni, setDni] = useState("");
   const [loading, setLoading] = useState(false);
   const signatureRef = useRef<SignatureViewRef>(null);
@@ -43,17 +45,23 @@ export function DeliverySignatureModal({
     try {
       setLoading(true);
 
+      // Logueamos toda la información relevante para el proceso de entrega
+      console.log("====== [1. MODAL] Iniciando proceso de entrega ======");
+      console.log("Package ID:", packageId);
+      console.log("DNI ingresado:", dni);
+      console.log("Courier ID activo desde AuthContext:", user?.id);
+      console.log("Firma Base64 recibida");
+
       // Capturamos el momento exacto en formato ISO estándar (ej: "2026-06-07T23:01:00.000Z")
       const currentTime = new Date().toISOString();
 
-      // Actualizamos el estado del paquete a través de la capa de servicios
-      await packageService.updatePackage(packageId, {
-        status: "DELIVERED",
-        deliveredAt: currentTime,
-        // Campos listos para cuando el backend los soporte:
-        // recipientDni: dni,
-        // signature: signatureBase64
+      await verificationService.createVerification({
+        packageId: packageId,
+        recipientDni: dni,
+        signature: signatureBase64,
+        courierId: user?.id || "", // Si está vacío manda un string para evitar fallas del DTO
       });
+
       alert(`¡Paquete ${trackingCode} entregado con éxito!`);
 
       // Limpiamos estados locales antes de cerrar
