@@ -12,6 +12,9 @@ export function useSessionSocket() {
     let socket: ReturnType<typeof io>;
 
     async function connectSocket() {
+      const deviceId = Math.random().toString(36).substring(7);
+      console.log(`DISPOSITIVO ${deviceId} - INICIANDO CONEXIÓN`);
+      
       const token = await TokenService.getAccessToken();
       if (!token) return;
 
@@ -20,18 +23,19 @@ export function useSessionSocket() {
       });
 
       socket.on('connect', () => {
-        console.log('FRONT: SOCKET CONECTADO');
+        console.log(` DISPOSITIVO ${deviceId} - SOCKET CONECTADO`);
       });
 
       socket.on('connect_error', (error) => {
-        console.log('FRONT: ERROR DE CONEXIÓN:', error.message);
+        console.log(` DISPOSITIVO ${deviceId} - ERROR DE CONEXIÓN:`, error.message);
       });
 
       socket.on('disconnect', (reason) => {
-        console.log('FRONT: SOCKET DESCONECTADO. Razón:', reason);
+        console.log(` DISPOSITIVO ${deviceId} - SOCKET DESCONECTADO`);
       });
 
       socket.on('force_logout', () => {
+        console.log(` DISPOSITIVO ${deviceId} - RECIBÍ FORCE_LOGOUT`);
         Alert.alert(
           'Sesión Cerrada',
           'Tu sesión fue cerrada desde otro dispositivo o por un administrador.',

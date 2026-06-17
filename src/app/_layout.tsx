@@ -4,7 +4,7 @@ import { AuthProvider, useAuth } from "../context/AuthContext";
 import { useEffect } from "react";
 import { View, ActivityIndicator } from "react-native";
 
-// 1. EL PATOVICA: Este componente lee el estado y decide adónde vas
+// Este componente se encarga de manejar la navegación y la autenticación de la aplicación.
 function RootLayoutNav() {
   const { isAuthenticated, isLoading } = useAuth();
   const segments = useSegments();
@@ -18,7 +18,7 @@ function RootLayoutNav() {
     if (!isAuthenticated && !inAuthScreen) {
       router.replace("/login");
     } else if (isAuthenticated && inAuthScreen) {
-      router.replace("/(tabs)"); 
+      router.replace("/(app)/(tabs)"); 
     }
   }, [isAuthenticated, isLoading, segments]);
 
@@ -35,7 +35,6 @@ function RootLayoutNav() {
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="login" />
       <Stack.Screen name="(app)" />
-      <Stack.Screen name="scan" />
     </Stack>
   );
 }

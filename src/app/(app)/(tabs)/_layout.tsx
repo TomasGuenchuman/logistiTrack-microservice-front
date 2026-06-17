@@ -2,13 +2,11 @@ import { Tabs, useRouter } from "expo-router";
 import { Home, ScanLine, Settings } from "lucide-react-native";
 import { Pressable, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useSessionSocket } from "../../hooks/useSessionSocket";
 
 export default function TabsLayout() {
   const router = useRouter();
   const insets = useSafeAreaInsets(); // dinamicamnete ajusta el width del tabBar para los botenes del dispositivo
-  useSessionSocket();
-  console.log('TABS LAYOUT RENDERIZADO');
+
   return (
     <Tabs
       screenOptions={{
@@ -75,7 +73,7 @@ export default function TabsLayout() {
               accessibilityRole="button"
               accessibilityState={accessibilityState}
               style={style}
-              onPress={() => router.push("/scan")}
+              onPress={() => router.push("/(app)/scan")}
             >
               {children}
             </Pressable>

@@ -46,7 +46,7 @@ export default function LoginScreen() {
 
       await login(access_token, refresh_token);
 
-      router.replace("/(tabs)");
+      router.replace("/(app)/(tabs)");
     } catch (error: any) {
       const data = error.response?.data;
       console.log("ERRORES DEL BACKEND:", data);

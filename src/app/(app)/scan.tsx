@@ -30,7 +30,7 @@ export default function ScanScreen() {
     // Código de prueba que cargamos en los mocks de Juan Pérez
     const defaultMockCode = "QR-99283-GT"; 
     
-    router.push(`/package/${defaultMockCode}`);
+    router.push(`/(app)/package/${defaultMockCode}`);
   };
 
   // MANEJO REAL DEL ESCANEO DE QR
@@ -44,7 +44,7 @@ export default function ScanScreen() {
     const cleanTrackingCode = data.trim();
 
     // Redirección nativa limpia para rutas dinámicas en Expo Router
-    router.push(`/package/${cleanTrackingCode}`);
+    router.push(`/(app)/package/${cleanTrackingCode}`);
   };
 
 
