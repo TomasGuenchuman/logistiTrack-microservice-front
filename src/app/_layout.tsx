@@ -18,7 +18,7 @@ function RootLayoutNav() {
     if (!isAuthenticated && !inAuthScreen) {
       router.replace("/login");
     } else if (isAuthenticated && inAuthScreen) {
-      router.replace("/"); 
+      router.replace("/(tabs)"); 
     }
   }, [isAuthenticated, isLoading, segments]);
 
