@@ -45,13 +45,6 @@ export function DeliverySignatureModal({
     try {
       setLoading(true);
 
-      // Logueamos toda la información relevante para el proceso de entrega
-      console.log("====== [1. MODAL] Iniciando proceso de entrega ======");
-      console.log("Package ID:", packageId);
-      console.log("DNI ingresado:", dni);
-      console.log("Courier ID activo desde AuthContext:", user?.id);
-      console.log("Firma Base64 recibida");
-
       // Capturamos el momento exacto en formato ISO estándar (ej: "2026-06-07T23:01:00.000Z")
       const currentTime = new Date().toISOString();
 
