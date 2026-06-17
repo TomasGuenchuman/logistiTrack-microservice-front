@@ -1,4 +1,5 @@
 import { TokenService } from "@/services/token-service";
+import { getUserFromToken } from "@/utils/jwt";
 import {
   createContext,
   ReactNode,
@@ -17,11 +18,7 @@ type AuthContextType = {
   user: AuthUser | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (
-    accessToken: string,
-    refreshToken: string,
-    user: AuthUser,
-  ) => Promise<void>;
+  login: (accessToken: string, refreshToken: string) => Promise<void>;
   logout: () => Promise<void>;
 };
 
@@ -43,6 +40,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
     async function checkAuthStatus() {
       const token = await TokenService.getAccessToken();
       if (token) {
+        const decodedUser: AuthUser = getUserFromToken(token);
+        setUser(decodedUser);
         setIsAuthenticated(true);
       }
       setIsLoading(false);
@@ -50,13 +49,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
     checkAuthStatus();
   }, []);
 
-  async function login(
-    accessToken: string,
-    refreshToken: string,
-    user: AuthUser,
-  ) {
+  async function login(accessToken: string, refreshToken: string) {
     await TokenService.saveTokens(accessToken, refreshToken);
-    setUser(user);
+    const decodedUser: AuthUser = getUserFromToken(accessToken);
+    setUser(decodedUser);
     setIsAuthenticated(true);
   }
 
@@ -77,7 +73,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
 export function useAuth() {
   const context = useContext(AuthContext);
-  console.log("Holaa");
 
   if (!context) {
     throw new Error("useAuth debe usarse dentro de AuthProvider");
