@@ -3,7 +3,7 @@ import { Alert } from 'react-native';
 import { io } from 'socket.io-client';
 import { useAuth } from '../context/AuthContext';
 import { API_URLS } from '../api/endpoints';
-import { TokenService } from '../services/token-service';
+import { TokenService } from '../services/auth/token-service';
 
 export function useSessionSocket() {
   const { logout, isAuthenticated } = useAuth();

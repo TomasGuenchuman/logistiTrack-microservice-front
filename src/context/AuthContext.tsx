@@ -1,6 +1,6 @@
 import { jwtDecode } from "jwt-decode";
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
-import { TokenService } from "../services/token-service";
+import { TokenService } from "../services/auth/token-service";
 
 
 //DEFINIMOS LA ESTRUCTURA DEL CONTENIDO DEL JWT DE NESTJS
