@@ -4,9 +4,9 @@ import { useSessionSocket } from "../../hooks/useSessionSocket";
 
 export default function AppLayout() {
   const { isAuthenticated } = useAuth();
-
+  console.log('🔥 APPLAYOUT RENDERIZADO');
   // el hook que conecta el socket y escucha el evento de cierre de sesión forzado
-  useSessionSocket();
+  //useSessionSocket();
 
   if (!isAuthenticated) {
     return <Redirect href="/login" />;
