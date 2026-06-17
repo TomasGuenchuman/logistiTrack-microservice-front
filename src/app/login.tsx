@@ -1,6 +1,5 @@
 import { API_URLS } from "@/api/endpoints";
 import { useAuth } from "@/context/AuthContext";
-import { DeviceService } from "@/services/device-service";
 import axios from "axios";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
@@ -37,12 +36,10 @@ export default function LoginScreen() {
       setIsLoading(true);
 
       const endpoint = `${API_URLS.BASE}${API_URLS.AUTH.LOGIN}`;
-      const deviceId = await DeviceService.getDeviceId();
 
       const response = await axios.post(endpoint, {
         email: email.trim().toLowerCase(),
         password: password,
-        deviceId: deviceId,
       });
 
       const { access_token, refresh_token } = response.data;
