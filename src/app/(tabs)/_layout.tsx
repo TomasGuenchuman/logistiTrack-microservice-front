@@ -7,7 +7,6 @@ import { useSessionSocket } from "../../hooks/useSessionSocket";
 export default function TabsLayout() {
   const router = useRouter();
   const insets = useSafeAreaInsets(); // dinamicamnete ajusta el width del tabBar para los botenes del dispositivo
-  // src/app/(tabs)/_layout.tsx
   useSessionSocket();
   console.log('TABS LAYOUT RENDERIZADO');
   return (
