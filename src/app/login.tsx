@@ -2,7 +2,6 @@ import { API_URLS } from "@/api/endpoints";
 import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 import { LinearGradient } from "expo-linear-gradient";
-import { router } from "expo-router";
 import {
   ArrowRight,
   LockKeyhole,
@@ -45,15 +44,8 @@ export default function LoginScreen() {
       const { access_token, refresh_token } = response.data;
 
       await login(access_token, refresh_token);
-
-      router.replace("/(tabs)");
     } catch (error: any) {
       const data = error.response?.data;
-      console.log("ERRORES DEL BACKEND:", data);
-      console.log("ERROR COMPLETO:", error);
-      console.log("RESPONSE:", error.response);
-      console.log("REQUEST:", error.request);
-      console.log("MESSAGE:", error.message);
 
       const mensajeReal =
         data?.authServiceMessage ||

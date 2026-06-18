@@ -1,4 +1,3 @@
-import { router } from "expo-router";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { useAuth } from "../../../src/context/AuthContext";
 
@@ -7,8 +6,6 @@ export default function SettingsScreen() {
 
   function handleLogout() {
     logout();
-
-    router.replace("/login");
   }
 
   return (

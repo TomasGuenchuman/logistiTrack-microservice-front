@@ -1,9 +1,9 @@
+import { AuthProvider, useAuth } from "@/context/AuthContext";
 import { Stack, useRouter, useSegments } from "expo-router";
-import { AuthProvider, useAuth } from "../context/AuthContext";
 import { useEffect } from "react";
-import { View, ActivityIndicator } from "react-native";
+import { ActivityIndicator, View } from "react-native";
 
-// 1. EL PATOVICA: Este componente lee el estado y decide adónde vas
+// Este componente lee el estado y decide adónde vas
 function RootLayoutNav() {
   const { isAuthenticated, isLoading } = useAuth();
   const segments = useSegments();
@@ -17,7 +17,7 @@ function RootLayoutNav() {
     if (!isAuthenticated && !inAuthScreen) {
       router.replace("/login");
     } else if (isAuthenticated && inAuthScreen) {
-      router.replace("/"); 
+      router.replace("/");
     }
   }, [isAuthenticated, isLoading, segments]);
 

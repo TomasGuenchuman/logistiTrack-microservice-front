@@ -32,7 +32,7 @@ export class ApiPackageService implements PackageService {
     return mapPackageFromApi(response.data);
   }
 
-  async getPackagesByCourierId(courierId: string): Promise<Package[]> {
+  async getPackagesByCourierId(courierId?: string): Promise<Package[]> {
     const response = await apiClient.get<PackageApiResponse[]>(
       `/packages/courier/${courierId}`,
     );
