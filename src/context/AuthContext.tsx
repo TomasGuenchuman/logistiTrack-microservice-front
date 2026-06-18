@@ -1,3 +1,4 @@
+import { router } from "expo-router";
 import { jwtDecode } from "jwt-decode";
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { TokenService } from "../services/auth/token-service";
@@ -66,6 +67,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     await TokenService.clearTokens();
     setIsAuthenticated(false);
     setCourierId(null); // Limpiamos el ID del courier al hacer logout
+    router.replace("/login");
   }
 
   return (
