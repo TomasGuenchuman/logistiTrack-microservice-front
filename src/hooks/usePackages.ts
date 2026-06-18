@@ -9,20 +9,28 @@ export function usePackages() {
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   // Sacamos la función afuera
-  const fetchPackages = useCallback(async () => {
+  const fetchPackages = useCallback(async (options?: { signal?: AbortSignal }) => {
     try {
-      const data = await packageService.getPackages();
+      const data = await packageService.getPackages(options);
       setPackages(data);
       console.log("Paquetes recargados desde el hook");
-    } catch (error) {
-      console.error("Error al recargar paquetes desde el hook:", error);
+    } catch (error: any) {
+      if (error.name === 'AbortError' || error.code === 'ERR_CANCELED') return;
+      console.error("Error al recargar paquetes:", {
+        status: error?.response?.status,
+        message: error?.message,
+        name: error?.name,
+        code: error?.code,
+      });
     }
   }, []);
 
   // Reacción por navegación. Mantiene la lista fresca si el repartidor cambia de pantalla
   useFocusEffect(
     useCallback(() => {
-      fetchPackages();
+      const controller = new AbortController();
+      fetchPackages({ signal: controller.signal });
+      return () => controller.abort();
     }, [fetchPackages]),
   );
 

@@ -9,8 +9,8 @@ import { UpdatePackageDto } from "@/types/dtos/UpdatePackageDto";
 import { PackageService } from "./PackageService";
 
 export class ApiPackageService implements PackageService {
-  async getPackages(): Promise<Package[]> {
-    const response = await apiClient.get<PackageApiResponse[]>("/packages");
+  async getPackages(options?: { signal?: AbortSignal }): Promise<Package[]> {
+  const response = await apiClient.get<PackageApiResponse[]>("/packages", { signal: options?.signal });
     // Retorno los paquetes mapeados a la estructura del dominio (front)
     const paquetesMapeados = mapPackagesFromApi(response.data);
     return paquetesMapeados;
