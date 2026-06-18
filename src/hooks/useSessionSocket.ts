@@ -38,7 +38,7 @@ export function useSessionSocket() {
         console.log(` DISPOSITIVO ${deviceId} - RECIBÍ FORCE_LOGOUT`);
         Alert.alert(
           'Sesión Cerrada',
-          'Tu sesión fue cerrada desde otro dispositivo o por un administrador.',
+          'Tu sesión fue cerrada por inicio de sesión de otro dispositivo.',
           [{ text: 'Entendido', onPress: () => logout() }]
         );
       });

@@ -1,25 +1,43 @@
+import { useAuth } from "@/context/AuthContext";
 import { router, useLocalSearchParams } from "expo-router";
-import { Check, MapPin, PackageCheck, ShieldCheck, User, X } from "lucide-react-native";
+import {
+  Check,
+  MapPin,
+  PackageCheck,
+  ShieldCheck,
+  User,
+  X,
+} from "lucide-react-native";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, Dimensions, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Dimensions,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-// 1. IMPORTAMOS LA ENTIDAD Y EL SERVICIO UNIFICADO DE TU CONTRATO
+// 1. IMPORTAMOS LA ENTIDAD Y EL SERVICIO UNIFICADO DEL CONTRATO
 import { packageService } from "@/services/index";
 import { Package } from "@/types/domain/Package";
 
-// NOTA: Este screen es el que se muestra al escanear un código QR, por lo que recibe el trackingCode por parámetro en la URL (ver app/(app)/(tabs)/scan/index.tsx)
+// NOTA: Este screen es el que se muestra al escanear un código QR, por lo que
+// recibe el trackingCode por parámetro en la URL (ver app/(app)/(tabs)/scan/index.tsx)
 const { width } = Dimensions.get("window");
 const HORIZONTAL_PADDING = 20;
 const CARD_GAP = 14;
 const DETAIL_CARD_WIDTH = (width - HORIZONTAL_PADDING * 2 - CARD_GAP) / 2;
 const isSmallScreen = width < 380;
 
-// Este screen es el que se muestra al escanear un código QR, por lo que recibe el 
+// NOTA: Este screen es el que se muestra al escanear un código QR, por lo que recibe el
 // trackingCode por parámetro en la URL (ver app/(app)/(tabs)/scan/index.tsx)
 export default function PackageTrackingScreen() {
   const params = useLocalSearchParams<{ trackingCode?: string }>();
-  
+  const { user } = useAuth();
+
   // Usamos el código que viene del escáner por parámetro o un fallback para testing web
   const trackingCodeParam = params.trackingCode ?? "QR-99283-GT";
 
@@ -33,7 +51,8 @@ export default function PackageTrackingScreen() {
     async function fetchPackage() {
       try {
         setLoading(true);
-        const data = await packageService.getPackageByTrackingCode(trackingCodeParam);
+        const data =
+          await packageService.getPackageByTrackingCode(trackingCodeParam);
         if (data) {
           setPackageData(data);
         } else {
@@ -55,12 +74,15 @@ export default function PackageTrackingScreen() {
     if (!packageData) return;
     try {
       setUpdating(true);
-      
-      // Ejecutamos la mutación en el servicio (que actualizará el array en memoria)
-      await packageService.updatePackage(packageData.id, { status: "IN_TRANSIT" });
-      
-      alert("¡Éxito! Paquete agregado a tu hoja de ruta.");
-      
+
+      // Ejecutamos la mutación en el servicio
+      await packageService.updatePackage(packageData.id, {
+        status: "PENDING",
+        courierId: user?.id,
+      });
+
+      alert("¡Éxito! Paquete agregado a pendientes.");
+
       // Forzamos el regreso a la Home para ver la lista refrescada
       router.replace("/(app)/(tabs)");
     } catch (error) {
@@ -74,7 +96,12 @@ export default function PackageTrackingScreen() {
   // 5. RENDERIZADO DE CARGA MIENTRAS BUSCA EN LOS MOCKS (500ms delay)
   if (loading) {
     return (
-      <View style={[styles.safeArea, { justifyContent: "center", alignItems: "center" }]}>
+      <View
+        style={[
+          styles.safeArea,
+          { justifyContent: "center", alignItems: "center" },
+        ]}
+      >
         <ActivityIndicator size="large" color="#004B43" />
         <Text style={{ marginTop: 14, color: "#073B78", fontWeight: "700" }}>
           VALIDANDO CON EL SERVIDOR...
@@ -94,7 +121,10 @@ export default function PackageTrackingScreen() {
         contentContainerStyle={styles.scrollContent}
       >
         <View style={styles.header}>
-          <Pressable style={styles.exitIconButton} onPress={() => router.back()}>
+          <Pressable
+            style={styles.exitIconButton}
+            onPress={() => router.back()}
+          >
             <X size={24} color="#374151" strokeWidth={2.5} />
           </Pressable>
           <View style={styles.headerLeft}>
@@ -119,7 +149,8 @@ export default function PackageTrackingScreen() {
                 Rastreo: {packageData.trackingCode}
               </Text>
               <Text style={styles.packageType}>
-                Estado Actual:{"\n"}{packageData.status}
+                Estado Actual:{"\n"}
+                {packageData.status}
               </Text>
             </View>
 
@@ -135,7 +166,9 @@ export default function PackageTrackingScreen() {
               <User size={28} color="#111827" />
             </View>
             <View>
-              <Text style={styles.recipientName}>{packageData.recipientName}</Text>
+              <Text style={styles.recipientName}>
+                {packageData.recipientName}
+              </Text>
               <Text style={styles.recipientPhone}>
                 DNI: {packageData.recipientDocument}
               </Text>
@@ -169,12 +202,15 @@ export default function PackageTrackingScreen() {
           <DetailCard label="CONTENIDO" value="Electrónicos (Caja)" />
           <DetailCard label="ETIQUETAS" value="⚠️ FRÁGIL" danger />
           <DetailCard label="PRIORIDAD" value="ALTA ⏳" />
-          <DetailCard label="REFERENCIA" value={`#ID-${packageData.id.substring(0, 5).toUpperCase()}`} />
+          <DetailCard
+            label="REFERENCIA"
+            value={`#ID-${packageData.id.substring(0, 5).toUpperCase()}`}
+          />
         </View>
 
         {/* 6. CONECTAMOS LA FUNCIÓN AL ONPRESS DEL BUTTON */}
-        <Pressable 
-          style={[styles.primaryButton, updating && { opacity: 0.6 }]} 
+        <Pressable
+          style={[styles.primaryButton, updating && { opacity: 0.6 }]}
           onPress={handleAddToRoute}
           disabled={updating}
         >
@@ -183,7 +219,7 @@ export default function PackageTrackingScreen() {
           ) : (
             <>
               <PackageCheck size={28} color="#FFFFFF" />
-              <Text style={styles.primaryButtonText}>AGREGAR A MI RUTA</Text>
+              <Text style={styles.primaryButtonText}>AGREGAR A PENDIENTES</Text>
             </>
           )}
         </Pressable>
@@ -204,7 +240,7 @@ type DetailCardProps = {
   danger?: boolean;
 };
 
-// Componente reutilizable para mostrar detalles específicos del paquete, con opción de marcar 
+// Componente reutilizable para mostrar detalles específicos del paquete, con opción de marcar
 // como "peligroso" o de alta prioridad
 function DetailCard({ label, value, danger }: DetailCardProps) {
   return (

@@ -1,8 +1,7 @@
-import 'react-native-get-random-values';
+import { AuthProvider, useAuth } from "@/context/AuthContext";
 import { Stack, useRouter, useSegments } from "expo-router";
-import { AuthProvider, useAuth } from "../context/AuthContext";
 import { useEffect } from "react";
-import { View, ActivityIndicator } from "react-native";
+import { ActivityIndicator, View } from "react-native";
 
 // Este componente se encarga de manejar la navegación y la autenticación de la aplicación.
 function RootLayoutNav() {

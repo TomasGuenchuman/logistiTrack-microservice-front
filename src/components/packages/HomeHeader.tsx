@@ -11,7 +11,7 @@ export function HomeHeader() {
 
       <Image
         source={{
-          uri: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=200",
+          uri: "https://i.kym-cdn.com/entries/icons/original/000/054/242/guy-pointing-at-himself.jpg",
         }}
         style={styles.avatar}
       />

@@ -30,7 +30,7 @@ export function DeliverySignatureModal({
   trackingCode,
   onSuccess,
 }: DeliverySignatureModalProps) {
-  const { courierId } = useAuth(); // Obtenemos el ID del courier desde el contexto de autenticación
+  const { user } = useAuth();
   const [dni, setDni] = useState("");
   const [loading, setLoading] = useState(false);
   const signatureRef = useRef<SignatureViewRef>(null);
@@ -45,13 +45,6 @@ export function DeliverySignatureModal({
     try {
       setLoading(true);
 
-      // Logueamos toda la información relevante para el proceso de entrega
-      console.log("====== [1. MODAL] Iniciando proceso de entrega ======");
-      console.log("Package ID:", packageId);
-      console.log("DNI ingresado:", dni);
-      console.log("Courier ID activo desde AuthContext:", courierId);
-      console.log("Firma Base64 recibida");
-
       // Capturamos el momento exacto en formato ISO estándar (ej: "2026-06-07T23:01:00.000Z")
       const currentTime = new Date().toISOString();
 
@@ -59,7 +52,7 @@ export function DeliverySignatureModal({
         packageId: packageId,
         recipientDni: dni,
         signature: signatureBase64,
-        courierId: courierId || "", // Si está vacío manda un string para evitar fallas del DTO
+        courierId: user?.id || "", // Si está vacío manda un string para evitar fallas del DTO
       });
 
       alert(`¡Paquete ${trackingCode} entregado con éxito!`);

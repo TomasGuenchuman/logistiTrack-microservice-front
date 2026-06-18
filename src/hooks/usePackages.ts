@@ -1,3 +1,4 @@
+import { useAuth } from "@/context/AuthContext";
 import { packageService } from "@/services/index";
 import { Package } from "@/types/domain/Package";
 import { useFocusEffect } from "expo-router";
@@ -5,13 +6,20 @@ import { useCallback, useState } from "react";
 
 export function usePackages() {
   const [packages, setPackages] = useState<Package[]>([]);
-  // Este contador nos va a servir como un "gatillo" manual para forzar la recarga
-  const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const { isAuthenticated, user } = useAuth();
+  const courierId = user?.id;
 
   // Sacamos la función afuera
   const fetchPackages = useCallback(async (options?: { signal?: AbortSignal }) => {
+    // Si no hay sesión o usuario, no se hace la petición GET de packages,
+    // simplemente limpiamos el estado de los paquetes
+    if (!isAuthenticated || !courierId) {
+      setPackages([]);
+      return;
+    }
+
     try {
-      const data = await packageService.getPackages(options);
+      const data = await packageService.getPackagesByCourierId(courierId, options);
       setPackages(data);
       console.log("Paquetes recargados desde el hook");
     } catch (error: any) {
@@ -23,7 +31,15 @@ export function usePackages() {
         code: error?.code,
       });
     }
-  }, []);
+
+    try {
+      const data = await packageService.getPackagesByCourierId(courierId);
+      setPackages(data);
+    } catch (error) {
+      console.error("Error al recargar paquetes desde el hook, error:", error);
+    }
+    // Obtenemos los paquetes cada vez que la sesión o el usuario cambia
+  }, [isAuthenticated, courierId]);
 
   // Reacción por navegación. Mantiene la lista fresca si el repartidor cambia de pantalla
   useFocusEffect(
@@ -34,8 +50,5 @@ export function usePackages() {
     }, [fetchPackages]),
   );
 
-  return {
-    packages,
-    fetchPackages,
-  };
+  return { packages, fetchPackages, };
 }
