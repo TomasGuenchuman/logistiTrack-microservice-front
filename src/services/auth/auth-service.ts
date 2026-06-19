@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { API_URLS } from '../api/endpoints';
+import { API_URLS } from '../../api/endpoints';
 import { TokenService } from './token-service';
 
 export const AuthService = {

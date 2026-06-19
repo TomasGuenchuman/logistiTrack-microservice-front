@@ -1,12 +1,6 @@
-import { TokenService } from "@/services/token-service";
 import { getUserFromToken } from "@/utils/jwt";
-import {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, ReactNode, useContext, useEffect, useState } from "react";
+import { TokenService } from "../services/auth/token-service";
 
 export type AuthUser = {
   id: string;

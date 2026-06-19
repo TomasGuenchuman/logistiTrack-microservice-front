@@ -6,6 +6,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 export default function TabsLayout() {
   const router = useRouter();
   const insets = useSafeAreaInsets(); // dinamicamnete ajusta el width del tabBar para los botenes del dispositivo
+
   return (
     <Tabs
       screenOptions={{
@@ -72,7 +73,7 @@ export default function TabsLayout() {
               accessibilityRole="button"
               accessibilityState={accessibilityState}
               style={style}
-              onPress={() => router.push("/scan")}
+              onPress={() => router.push("/(app)/scan")}
             >
               {children}
             </Pressable>

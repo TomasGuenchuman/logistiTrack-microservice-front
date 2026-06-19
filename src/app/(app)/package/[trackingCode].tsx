@@ -25,15 +25,15 @@ import { packageService } from "@/services/index";
 import { Package } from "@/types/domain/Package";
 
 // NOTA: Este screen es el que se muestra al escanear un código QR, por lo que
-// recibe el trackingCode por parámetro en la URL (ver app/(tabs)/scan/index.tsx)
+// recibe el trackingCode por parámetro en la URL (ver app/(app)/(tabs)/scan/index.tsx)
 const { width } = Dimensions.get("window");
 const HORIZONTAL_PADDING = 20;
 const CARD_GAP = 14;
 const DETAIL_CARD_WIDTH = (width - HORIZONTAL_PADDING * 2 - CARD_GAP) / 2;
 const isSmallScreen = width < 380;
 
-// Este screen es el que se muestra al escanear un código QR, por lo que recibe el
-// trackingCode por parámetro en la URL (ver app/(tabs)/scan/index.tsx)
+// NOTA: Este screen es el que se muestra al escanear un código QR, por lo que recibe el
+// trackingCode por parámetro en la URL (ver app/(app)/(tabs)/scan/index.tsx)
 export default function PackageTrackingScreen() {
   const params = useLocalSearchParams<{ trackingCode?: string }>();
   const { user } = useAuth();
@@ -84,7 +84,7 @@ export default function PackageTrackingScreen() {
       alert("¡Éxito! Paquete agregado a pendientes.");
 
       // Forzamos el regreso a la Home para ver la lista refrescada
-      router.replace("/(tabs)");
+      router.replace("/(app)/(tabs)");
     } catch (error) {
       console.error("Error updating package status:", error);
       alert("No se pudo actualizar el estado del paquete.");

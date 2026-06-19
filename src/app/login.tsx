@@ -44,6 +44,7 @@ export default function LoginScreen() {
       const { access_token, refresh_token } = response.data;
 
       await login(access_token, refresh_token);
+
     } catch (error: any) {
       const data = error.response?.data;
 

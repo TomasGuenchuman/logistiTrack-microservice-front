@@ -8,13 +8,8 @@ import { Package } from "@/types/domain/Package";
 import { UpdatePackageDto } from "@/types/dtos/UpdatePackageDto";
 import { PackageService } from "./PackageService";
 
+
 export class ApiPackageService implements PackageService {
-  async getPackages(): Promise<Package[]> {
-    const response = await apiClient.get<PackageApiResponse[]>("/packages");
-    // Retorno los paquetes mapeados a la estructura del dominio (front)
-    const paquetesMapeados = mapPackagesFromApi(response.data);
-    return paquetesMapeados;
-  }
 
   async getPackageById(id: string): Promise<Package | null> {
     const response = await apiClient.get<PackageApiResponse>(`/packages/${id}`);
@@ -32,13 +27,12 @@ export class ApiPackageService implements PackageService {
     return mapPackageFromApi(response.data);
   }
 
-  async getPackagesByCourierId(courierId?: string): Promise<Package[]> {
+  async getPackagesByCourierId(courierId: string, options?: { signal?: AbortSignal }): Promise<Package[]> {
     const response = await apiClient.get<PackageApiResponse[]>(
-      `/packages/courier/${courierId}`,
+      `/packages?courierId=${courierId}`, { signal: options?.signal }
     );
-
-    const packages = mapPackagesFromApi(response.data);
-    return packages;
+    const paquetesMapeados = mapPackagesFromApi(response.data);
+    return paquetesMapeados;
   }
 
   async updatePackage(

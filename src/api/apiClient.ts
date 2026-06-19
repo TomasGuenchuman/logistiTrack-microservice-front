@@ -1,6 +1,6 @@
 import { API_URLS } from "@/api/endpoints";
-import { AuthService } from "@/services/auth-service";
-import { TokenService } from "@/services/token-service";
+import { AuthService } from "@/services/auth/auth-service";
+import { TokenService } from "@/services/auth/token-service";
 import axios from "axios";
 
 export const apiClient = axios.create({

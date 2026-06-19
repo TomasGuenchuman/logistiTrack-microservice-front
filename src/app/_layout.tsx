@@ -3,7 +3,7 @@ import { Stack, useRouter, useSegments } from "expo-router";
 import { useEffect } from "react";
 import { ActivityIndicator, View } from "react-native";
 
-// Este componente lee el estado y decide adónde vas
+// Este componente se encarga de manejar la navegación y la autenticación de la aplicación.
 function RootLayoutNav() {
   const { isAuthenticated, isLoading } = useAuth();
   const segments = useSegments();
@@ -17,7 +17,7 @@ function RootLayoutNav() {
     if (!isAuthenticated && !inAuthScreen) {
       router.replace("/login");
     } else if (isAuthenticated && inAuthScreen) {
-      router.replace("/");
+      router.replace("/(app)/(tabs)"); 
     }
   }, [isAuthenticated, isLoading, segments]);
 
@@ -34,7 +34,6 @@ function RootLayoutNav() {
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="login" />
       <Stack.Screen name="(app)" />
-      <Stack.Screen name="scan" />
     </Stack>
   );
 }

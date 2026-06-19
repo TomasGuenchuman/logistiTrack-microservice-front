@@ -4,16 +4,32 @@ import { Package } from "@/types/domain/Package";
 import { useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
 
-export function usePackages(courierId?: string) {
+export function usePackages() {
   const [packages, setPackages] = useState<Package[]>([]);
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
+  const courierId = user?.id;
 
-  const fetchPackages = useCallback(async () => {
+  // Sacamos la función afuera
+  const fetchPackages = useCallback(async (options?: { signal?: AbortSignal }) => {
     // Si no hay sesión o usuario, no se hace la petición GET de packages,
     // simplemente limpiamos el estado de los paquetes
     if (!isAuthenticated || !courierId) {
       setPackages([]);
       return;
+    }
+
+    try {
+      const data = await packageService.getPackagesByCourierId(courierId, options);
+      setPackages(data);
+      console.log("Paquetes recargados desde el hook");
+    } catch (error: any) {
+      if (error.name === 'AbortError' || error.code === 'ERR_CANCELED') return;
+      console.error("Error al recargar paquetes:", {
+        status: error?.response?.status,
+        message: error?.message,
+        name: error?.name,
+        code: error?.code,
+      });
     }
 
     try {
@@ -28,16 +44,11 @@ export function usePackages(courierId?: string) {
   // Reacción por navegación. Mantiene la lista fresca si el repartidor cambia de pantalla
   useFocusEffect(
     useCallback(() => {
-      // aunque la navegación cambie, impido que se haga la petición
-      // debido a que no hay sesión activa
-      if (!isAuthenticated) return;
-
-      fetchPackages();
-    }, [fetchPackages, isAuthenticated]),
+      const controller = new AbortController();
+      fetchPackages({ signal: controller.signal });
+      return () => controller.abort();
+    }, [fetchPackages]),
   );
 
-  return {
-    packages,
-    fetchPackages,
-  };
+  return { packages, fetchPackages, };
 }
